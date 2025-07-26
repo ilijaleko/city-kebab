@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#ea580c" stroke="#c2410c" stroke-width="8"/>
+  
+  <!-- Kebab skewer -->
+  <rect x="248" y="80" width="16" height="352" fill="#8b4513" rx="8"/>
+  
+  <!-- Meat pieces -->
+  <ellipse cx="256" cy="130" rx="65" ry="30" fill="#8b4513"/>
+  <ellipse cx="256" cy="180" rx="75" ry="35" fill="#d2691e"/>
+  <ellipse cx="256" cy="230" rx="70" ry="32" fill="#8b4513"/>
+  <ellipse cx="256" cy="280" rx="78" ry="38" fill="#d2691e"/>
+  <ellipse cx="256" cy="330" rx="72" ry="34" fill="#8b4513"/>
+  <ellipse cx="256" cy="380" rx="68" ry="30" fill="#d2691e"/>
+  
+  <!-- Vegetables -->
+  <ellipse cx="256" cy="155" rx="50" ry="15" fill="#228b22"/>
+  <ellipse cx="256" cy="205" rx="55" ry="15" fill="#ff6347"/>
+  <ellipse cx="256" cy="255" rx="52" ry="15" fill="#228b22"/>
+  <ellipse cx="256" cy="305" rx="58" ry="15" fill="#ff6347"/>
+  <ellipse cx="256" cy="355" rx="50" ry="15" fill="#228b22"/>
+  
+  <!-- Highlight -->
+  <ellipse cx="220" cy="200" rx="20" ry="40" fill="#ffffff" opacity="0.3"/>
+  <ellipse cx="225" cy="280" rx="18" ry="35" fill="#ffffff" opacity="0.2"/>
+</svg> 
