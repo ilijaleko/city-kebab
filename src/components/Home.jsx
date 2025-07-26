@@ -94,7 +94,7 @@ function Home() {
               className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base cursor-pointer"
               size="lg"
             >
-              {creating ? "Stvaranje..." : "Stvori novu grupnu narudžbu"}
+              {creating ? "Stvaranje..." : "Kreiraj narudžbu"}
             </Button>
 
             <div className="flex items-center gap-3">
@@ -150,8 +150,16 @@ function Home() {
       </div>
       <footer className="mt-8 text-xs text-muted-foreground text-center max-w-md">
         <p>
-          Nije potrebna provjera autentičnosti. Podijelite vezu grupe s
-          prijateljima!
+          Made with ❤️ by{" "}
+          <a
+            href="https://ilijaleko.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 underline transition-colors"
+          >
+            Ilija
+          </a>
+          , for City Kebab Bjelovar.
         </p>
       </footer>
     </div>
