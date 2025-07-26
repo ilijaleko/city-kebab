@@ -84,7 +84,7 @@ function Home() {
               City Kebab grupna narudžba
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Stvori ili pridruži se grupnoj narudžbi s prijateljima
+              Stvori ili se pridruži grupnoj narudžbi s prijateljima
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
