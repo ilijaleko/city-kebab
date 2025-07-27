@@ -294,7 +294,7 @@ function Group() {
           <CardContent className="space-y-6">
             {/* Order Form */}
             <form onSubmit={addOrder} className="space-y-6">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
                     Ime (neobavezno)
@@ -304,7 +304,7 @@ function Group() {
                     placeholder="Vaše ime"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="h-11"
+                    className="h-11 w-full"
                     maxLength={30}
                   />
                 </div>
@@ -315,7 +315,7 @@ function Group() {
                   </label>
                   <Select value={kebabType} onValueChange={setKebabType}>
                     <SelectTrigger
-                      className={`h-11 ${
+                      className={`h-11 w-full ${
                         inputError && !kebabType ? "border-destructive" : ""
                       }`}
                       ref={kebabTypeRef}
@@ -339,7 +339,7 @@ function Group() {
                     </label>
                     <Select value={kebabSize} onValueChange={setKebabSize}>
                       <SelectTrigger
-                        className={`h-11 ${
+                        className={`h-11 w-full ${
                           inputError && !kebabSize ? "border-destructive" : ""
                         }`}
                       >
@@ -375,7 +375,7 @@ function Group() {
                                 setSelectedAdds([...selectedAdds, add]);
                               } else {
                                 setSelectedAdds(
-                                  selectedAdds.filter((item) => item !== add),
+                                  selectedAdds.filter((item) => item !== add)
                                 );
                               }
                             }}
@@ -460,7 +460,7 @@ function Group() {
                                     +{" "}
                                     {order.adds
                                       .map(
-                                        (add) => `${addonsEmojis[add]} ${add}`,
+                                        (add) => `${addonsEmojis[add]} ${add}`
                                       )
                                       .join(", ")}
                                   </p>
@@ -538,3 +538,4 @@ function Group() {
 }
 
 export default Group;
+
