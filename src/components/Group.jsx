@@ -89,6 +89,16 @@ function Group() {
   const shouldShowCheese =
     kebabType && (kebabType === "pecivo" || kebabType === "tortilja");
 
+  // Detect if user is on mobile device
+  const isMobile = () => {
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) ||
+      ("ontouchstart" in window && window.innerWidth < 768)
+    );
+  };
+
   // Reset size when kebab type changes
   useEffect(() => {
     if (!shouldShowSize) {
@@ -176,6 +186,11 @@ function Group() {
     setCopied(true);
     toast.success("Poveznica kopirana!");
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleFooterCopy = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Poveznica kopirana!");
   };
 
   // Format orders for SMS
@@ -622,9 +637,13 @@ function Group() {
         </Card>
 
         <footer className="mt-8 text-xs text-muted-foreground text-center">
-          <p>
-            Podijelite ovu poveznicu s prijateljima da dodaju svoj kebab u
-            grupnu narudžbu.
+          <p
+            onClick={handleFooterCopy}
+            className="cursor-pointer hover:text-orange-600 transition-colors duration-200 hover:underline"
+            title="Kliknite za kopiranje poveznice"
+          >
+            Pošalji ovu poveznicu prijateljima kako bi dodali svoj kebab u
+            zajedničku narudžbu.
           </p>
         </footer>
       </div>
