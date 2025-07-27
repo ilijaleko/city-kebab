@@ -81,10 +81,10 @@ function Home() {
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-2">
             <CardTitle className="text-2xl sm:text-3xl font-bold text-orange-600">
-              City Kebab grupna narudžba
+              City Kebab narudžba
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Stvori ili se pridruži grupnoj narudžbi s prijateljima
+              Pokreni ili se pridruži grupnoj narudžbi s prijateljima
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -145,6 +145,78 @@ function Home() {
                 </div>
               )}
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Info Section */}
+        <Card className="shadow-lg mt-6">
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl font-bold text-orange-600">
+              Kako funkcionira narudžba?
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">
+                    Kreiraj narudžbu i pozovi prijatelje
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Stvori grupnu narudžbu i podijeli ID ili poveznicu s
+                    prijateljima kako bi se mogli pridružiti.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">
+                    Provjeri je li City Kebab dostupan
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Nazovi restoran, potvrdi da primaju narudžbe i zatraži SMS
+                    narudžbu.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">
+                    Pošalji SMS narudžbu
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Kopiraj generirani SMS iz grupe i pošalji ga na broj
+                    restorana.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">
+                    Preuzmi svoju narudžbu
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Preuzmi narudžbu u City Kebabu u dogovoreno vrijeme. Sve će
+                    biti spremno za preuzimanje.
+                  </p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
