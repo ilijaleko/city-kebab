@@ -89,16 +89,6 @@ function Group() {
   const shouldShowCheese =
     kebabType && (kebabType === "pecivo" || kebabType === "tortilja");
 
-  // Detect if user is on mobile device
-  const isMobile = () => {
-    return (
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      ) ||
-      ("ontouchstart" in window && window.innerWidth < 768)
-    );
-  };
-
   // Reset size when kebab type changes
   useEffect(() => {
     if (!shouldShowSize) {
