@@ -327,18 +327,11 @@ function Group() {
                   Dodajte svoju kebab narudžbu u grupu
                 </CardDescription>
               </div>
-              <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
-                <div className="flex items-center space-x-2">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    ID grupe:
-                  </span>
-                  <code className="text-xs sm:text-sm bg-orange-100 text-orange-800 px-2 py-1 rounded font-mono font-semibold">
-                    {groupId}
-                  </code>
-                </div>
+              <div className="flex justify-end">
                 <Button
                   onClick={handleCopy}
-                  className="bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+                  variant="outline"
+                  className="border-muted-foreground/20 text-muted-foreground hover:bg-muted/50 hover:text-foreground cursor-pointer"
                   size="sm"
                 >
                   {copied ? "Kopirano!" : "Kopiraj poveznicu"}
@@ -626,11 +619,17 @@ function Group() {
           </CardContent>
         </Card>
 
-        <footer className="mt-8 text-xs text-muted-foreground text-center">
+        <footer className="mt-8 text-xs text-muted-foreground text-center space-y-2">
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-muted-foreground/70">ID grupe:</span>
+            <code className="bg-muted/50 text-muted-foreground px-1.5 py-0.5 rounded font-mono">
+              {groupId}
+            </code>
+          </div>
           <p
             onClick={handleFooterCopy}
             className="cursor-pointer hover:text-orange-600 transition-colors duration-200 hover:underline"
-            title="Kliknite za kopiranje poveznice"
+            title="Kliknite za kopiranje povezave"
           >
             Pošalji ovu poveznicu prijateljima kako bi dodali svoj kebab u
             zajedničku narudžbu.
