@@ -5,7 +5,6 @@
   "tsx": false,
   "tailwind": {
     "config": "",
-    "css": "src/index.css",
     "baseColor": "gray",
     "cssVariables": true,
     "prefix": ""
@@ -19,3 +18,4 @@
   },
   "iconLibrary": "lucide"
 }
+

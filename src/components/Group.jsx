@@ -41,6 +41,7 @@ function Group() {
   const [smsFormatCopied, setSmsFormatCopied] = useState(false);
   const [groupExists, setGroupExists] = useState(true);
   const [hasCheese, setHasCheese] = useState(false);
+  const [sauce, setSauce] = useState("");
 
   const kebabTypes = [
     "pecivo",
@@ -50,6 +51,15 @@ function Group() {
   ];
 
   const kebabSizes = ["mali", "veliki"];
+
+  const sauceOptions = [
+    "ljuti",
+    "ljuti (malo manje)",
+    "blagi",
+    "blagi (malo manje)",
+    "mix",
+    "mix (malo manje)",
+  ];
 
   const kebabAdds = [
     "luk",
@@ -128,6 +138,10 @@ function Group() {
       setInputError("Molimo odaberite veličinu.");
       return;
     }
+    if (!sauce) {
+      setInputError("Molimo odaberite umak.");
+      return;
+    }
     setAdding(true);
     const groupsCol = collection(db, "groups");
     const snapshot = await getDocs(groupsCol);
@@ -140,6 +154,7 @@ function Group() {
         kebabSize: shouldShowSize ? kebabSize : null,
         adds: selectedAdds,
         hasCheese: shouldShowCheese ? hasCheese : null,
+        sauce: sauce,
       };
       const updatedOrders = [...(groupDoc.data().orders || []), newOrder];
       await updateDoc(groupDoc.ref, { orders: updatedOrders });
@@ -149,6 +164,7 @@ function Group() {
       setSelectedAdds([]);
       setName("");
       setHasCheese(false);
+      setSauce("");
       toast.success("Narudžba dodana!");
       kebabTypeRef.current?.focus();
     }
@@ -169,8 +185,9 @@ function Group() {
         const orderNumber = index + 1;
         const kebabType = order.kebabType;
         const size = order.kebabSize ? `, ${order.kebabSize}` : "";
+        const sauce = order.sauce ? `, ${order.sauce}` : "";
 
-        // Combine regular addons with cheese information
+        // Combine regular addons with cheese information (excluding sauce)
         const allAddons = [];
         if (order.adds && order.adds.length > 0) {
           allAddons.push(...order.adds);
@@ -181,9 +198,9 @@ function Group() {
 
         const addons =
           allAddons.length > 0 ? `, dodaci: ${allAddons.join(", ")}` : "";
-        const name = order.name ? `, ${order.name}` : "";
+        const name = order.name ? `${order.name}` : "";
 
-        return `${orderNumber}. ${kebabType}${size}${addons}${name}`;
+        return `${orderNumber}. ${kebabType}${size}${sauce}${addons} - ${name}`;
       })
       .join("\n");
   };
@@ -360,6 +377,29 @@ function Group() {
                   </Select>
                 </div>
 
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Umak *
+                  </label>
+                  <Select value={sauce} onValueChange={setSauce}>
+                    <SelectTrigger
+                      className={`h-11 w-full ${
+                        inputError && !sauce ? "border-destructive" : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Odaberite umak" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sauceOptions.map((sauceOption) => (
+                        <SelectItem key={sauceOption} value={sauceOption}>
+                          {sauceOption.charAt(0).toUpperCase() +
+                            sauceOption.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {shouldShowSize && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
@@ -503,6 +543,7 @@ function Group() {
                                   {order.kebabType}
                                   {order.kebabSize && ` - ${order.kebabSize}`}
                                   {order.hasCheese === true && " - sa sirom 🧀"}
+                                  {order.sauce && ` - umak: ${order.sauce}`}
                                 </p>
                                 {order.adds && order.adds.length > 0 && (
                                   <p className="text-xs text-muted-foreground mt-1">
