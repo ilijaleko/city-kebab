@@ -18,9 +18,9 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { collection, getDocs, updateDoc } from "firebase/firestore";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { db } from "../firebase";
 
@@ -40,6 +40,7 @@ function Group() {
   const [showSmsFormat, setShowSmsFormat] = useState(false);
   const [smsFormatCopied, setSmsFormatCopied] = useState(false);
   const [groupExists, setGroupExists] = useState(true);
+  const [hasCheese, setHasCheese] = useState(false);
 
   const kebabTypes = [
     "pecivo",
@@ -74,12 +75,23 @@ function Group() {
     kebabType !== "tortilja mix salata" &&
     kebabType !== "vegetarijanski";
 
+  // Check if current kebab type should show cheese option
+  const shouldShowCheese =
+    kebabType && (kebabType === "pecivo" || kebabType === "tortilja");
+
   // Reset size when kebab type changes
   useEffect(() => {
     if (!shouldShowSize) {
       setKebabSize("");
     }
   }, [kebabType, shouldShowSize]);
+
+  // Reset cheese when kebab type changes
+  useEffect(() => {
+    if (!shouldShowCheese) {
+      setHasCheese(false);
+    }
+  }, [kebabType, shouldShowCheese]);
 
   // Fetch group orders
   useEffect(() => {
@@ -127,6 +139,7 @@ function Group() {
         kebabType,
         kebabSize: shouldShowSize ? kebabSize : null,
         adds: selectedAdds,
+        hasCheese: shouldShowCheese ? hasCheese : null,
       };
       const updatedOrders = [...(groupDoc.data().orders || []), newOrder];
       await updateDoc(groupDoc.ref, { orders: updatedOrders });
@@ -135,6 +148,7 @@ function Group() {
       setKebabSize("");
       setSelectedAdds([]);
       setName("");
+      setHasCheese(false);
       toast.success("Narudžba dodana!");
       kebabTypeRef.current?.focus();
     }
@@ -155,10 +169,18 @@ function Group() {
         const orderNumber = index + 1;
         const kebabType = order.kebabType;
         const size = order.kebabSize ? `, ${order.kebabSize}` : "";
+
+        // Combine regular addons with cheese information
+        const allAddons = [];
+        if (order.adds && order.adds.length > 0) {
+          allAddons.push(...order.adds);
+        }
+        if (order.hasCheese === true) {
+          allAddons.push("sir");
+        }
+
         const addons =
-          order.adds && order.adds.length > 0
-            ? `, dodaci: ${order.adds.join(", ")}`
-            : "";
+          allAddons.length > 0 ? `, dodaci: ${allAddons.join(", ")}` : "";
         const name = order.name ? `, ${order.name}` : "";
 
         return `${orderNumber}. ${kebabType}${size}${addons}${name}`;
@@ -361,6 +383,26 @@ function Group() {
                     </Select>
                   </div>
                 )}
+
+                {shouldShowCheese && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">
+                      Sir 🧀
+                    </label>
+                    <Select
+                      value={hasCheese ? "da" : "ne"}
+                      onValueChange={(value) => setHasCheese(value === "da")}
+                    >
+                      <SelectTrigger className="h-11 w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ne">Ne</SelectItem>
+                        <SelectItem value="da">Da</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </div>
 
               {/* Add-ons Selection */}
@@ -460,6 +502,7 @@ function Group() {
                                 <p className="text-sm text-muted-foreground capitalize">
                                   {order.kebabType}
                                   {order.kebabSize && ` - ${order.kebabSize}`}
+                                  {order.hasCheese === true && " - sa sirom 🧀"}
                                 </p>
                                 {order.adds && order.adds.length > 0 && (
                                   <p className="text-xs text-muted-foreground mt-1">
