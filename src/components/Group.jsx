@@ -103,6 +103,10 @@ function Group() {
   const addOrder = async (e) => {
     e.preventDefault();
     setInputError("");
+    if (!name.trim()) {
+      setInputError("Molimo unesite ime.");
+      return;
+    }
     if (!kebabType) {
       setInputError("Molimo odaberite vrstu kebaba.");
       kebabTypeRef.current?.focus();
@@ -297,14 +301,16 @@ function Group() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
-                    Ime (neobavezno)
+                    Ime ili nadimak *
                   </label>
                   <Input
                     type="text"
-                    placeholder="Vaše ime"
+                    placeholder="Vaše ime ili nadimak"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="h-11 w-full"
+                    className={`h-11 w-full ${
+                      inputError && !name ? "border-destructive" : ""
+                    }`}
                     maxLength={30}
                   />
                 </div>
@@ -335,7 +341,7 @@ function Group() {
                 {shouldShowSize && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
-                      Veličina *
+                      Veličina kebaba *
                     </label>
                     <Select value={kebabSize} onValueChange={setKebabSize}>
                       <SelectTrigger
