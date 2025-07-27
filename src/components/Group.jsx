@@ -319,15 +319,7 @@ function Group() {
         <Card className="shadow-lg">
           <CardHeader className="space-y-4">
             <div className="flex flex-col space-y-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
-              <div className="space-y-1">
-                <CardTitle className="text-xl sm:text-2xl font-bold text-orange-600">
-                  Grupna narudžba
-                </CardTitle>
-                <CardDescription>
-                  Dodajte svoju kebab narudžbu u grupu
-                </CardDescription>
-              </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end sm:order-2">
                 <Button
                   onClick={handleCopy}
                   variant="outline"
@@ -336,6 +328,14 @@ function Group() {
                 >
                   {copied ? "Kopirano!" : "Kopiraj poveznicu"}
                 </Button>
+              </div>
+              <div className="space-y-1 sm:order-1">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-orange-600">
+                  Grupna narudžba
+                </CardTitle>
+                <CardDescription>
+                  Dodajte svoju kebab narudžbu u grupu
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
