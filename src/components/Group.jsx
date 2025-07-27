@@ -375,7 +375,7 @@ function Group() {
                                 setSelectedAdds([...selectedAdds, add]);
                               } else {
                                 setSelectedAdds(
-                                  selectedAdds.filter((item) => item !== add)
+                                  selectedAdds.filter((item) => item !== add),
                                 );
                               }
                             }}
@@ -460,7 +460,7 @@ function Group() {
                                     +{" "}
                                     {order.adds
                                       .map(
-                                        (add) => `${addonsEmojis[add]} ${add}`
+                                        (add) => `${addonsEmojis[add]} ${add}`,
                                       )
                                       .join(", ")}
                                   </p>
@@ -538,4 +538,3 @@ function Group() {
 }
 
 export default Group;
-
