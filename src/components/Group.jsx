@@ -190,7 +190,15 @@ function Group() {
         // Combine regular addons with cheese information (excluding sauce)
         const allAddons = [];
         if (order.adds && order.adds.length > 0) {
-          allAddons.push(...order.adds);
+          // Check if all kebab addons are selected
+          const hasAllAddons = kebabAdds.every((addon) =>
+            order.adds.includes(addon)
+          );
+          if (hasAllAddons && order.adds.length === kebabAdds.length) {
+            allAddons.push("sve");
+          } else {
+            allAddons.push(...order.adds);
+          }
         }
         if (order.hasCheese === true) {
           allAddons.push("sir");
@@ -452,30 +460,62 @@ function Group() {
                     <h4 className="text-sm font-medium text-foreground mb-4">
                       Dodaci (neobavezno):
                     </h4>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      {kebabAdds.map((add) => (
-                        <div key={add} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={add}
-                            checked={selectedAdds.includes(add)}
-                            onCheckedChange={(checked) => {
-                              if (checked) {
-                                setSelectedAdds([...selectedAdds, add]);
-                              } else {
-                                setSelectedAdds(
-                                  selectedAdds.filter((item) => item !== add)
-                                );
-                              }
-                            }}
-                          />
-                          <label
-                            htmlFor={add}
-                            className="text-sm text-foreground capitalize cursor-pointer select-none"
+                    <div className="space-y-3">
+                      {/* All addons checkbox */}
+                      <div className="flex items-center space-x-2 pb-2 border-b border-border/50">
+                        <Checkbox
+                          id="all-addons"
+                          checked={
+                            selectedAdds.length === kebabAdds.length &&
+                            kebabAdds.every((addon) =>
+                              selectedAdds.includes(addon)
+                            )
+                          }
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedAdds([...kebabAdds]);
+                            } else {
+                              setSelectedAdds([]);
+                            }
+                          }}
+                        />
+                        <label
+                          htmlFor="all-addons"
+                          className="text-sm text-foreground font-medium cursor-pointer select-none"
+                        >
+                          ✨ Sve
+                        </label>
+                      </div>
+
+                      {/* Individual addon checkboxes */}
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                        {kebabAdds.map((add) => (
+                          <div
+                            key={add}
+                            className="flex items-center space-x-2"
                           >
-                            {addonsEmojis[add]} {add}
-                          </label>
-                        </div>
-                      ))}
+                            <Checkbox
+                              id={add}
+                              checked={selectedAdds.includes(add)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedAdds([...selectedAdds, add]);
+                                } else {
+                                  setSelectedAdds(
+                                    selectedAdds.filter((item) => item !== add)
+                                  );
+                                }
+                              }}
+                            />
+                            <label
+                              htmlFor={add}
+                              className="text-sm text-foreground capitalize cursor-pointer select-none"
+                            >
+                              {addonsEmojis[add]} {add}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -548,11 +588,24 @@ function Group() {
                                 {order.adds && order.adds.length > 0 && (
                                   <p className="text-xs text-muted-foreground mt-1">
                                     +{" "}
-                                    {order.adds
-                                      .map(
-                                        (add) => `${addonsEmojis[add]} ${add}`
-                                      )
-                                      .join(", ")}
+                                    {(() => {
+                                      const hasAllAddons = kebabAdds.every(
+                                        (addon) => order.adds.includes(addon)
+                                      );
+                                      if (
+                                        hasAllAddons &&
+                                        order.adds.length === kebabAdds.length
+                                      ) {
+                                        return "✨ sve";
+                                      } else {
+                                        return order.adds
+                                          .map(
+                                            (add) =>
+                                              `${addonsEmojis[add]} ${add}`
+                                          )
+                                          .join(", ");
+                                      }
+                                    })()}
                                   </p>
                                 )}
                               </div>
