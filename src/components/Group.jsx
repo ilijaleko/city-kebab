@@ -629,7 +629,7 @@ function Group() {
           <p
             onClick={handleFooterCopy}
             className="cursor-pointer hover:text-orange-600 transition-colors duration-200 hover:underline"
-            title="Kliknite za kopiranje povezave"
+            title="Klikni za kopiranje poveznice"
           >
             Pošalji ovu poveznicu prijateljima kako bi dodali svoj kebab u
             zajedničku narudžbu.
@@ -689,4 +689,3 @@ function Group() {
 }
 
 export default Group;
-
