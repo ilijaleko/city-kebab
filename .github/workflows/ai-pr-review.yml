@@ -14,7 +14,7 @@ env:
   REVIEW_EVENT: COMMENT
   # Configure which CLI to run for the review. Default is amp execute mode.
   REVIEW_CLI_BIN: claude
-  REVIEW_CLI_ARGS: -x
+  REVIEW_CLI_ARGS: -p --output-format json --max-turns 3
   # Tweak to your liking
   SYSTEM_PROMPT: |
     Review this patch like a thoughtful React senior engineer.
