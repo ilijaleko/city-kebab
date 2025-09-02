@@ -5,7 +5,7 @@
 
 export const FEATURE_NOTIFICATIONS = [
   {
-    id: "recepies-feature-2025-09",
+    id: "recipes-feature-2025-09",
     title: "Novo: Recepti! 📝",
     message: "Sada možete spremati svoje omiljene recepte. Mljac!",
     icon: "📝",
