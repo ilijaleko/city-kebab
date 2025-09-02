@@ -86,7 +86,13 @@ export const cleanupDismissedNotifications = (allNotifications) => {
     const now = Date.now();
     const validNotificationIds = new Set(
       allNotifications
-        .filter((n) => !n.endDate || new Date(n.endDate).getTime() >= now)
+        .filter((n) => {
+          // Calculate end date from releaseDate + durationFromRelease
+          const releaseTime = new Date(n.releaseDate).getTime();
+          const expiryTime =
+            releaseTime + n.durationFromRelease * 24 * 60 * 60 * 1000;
+          return expiryTime >= now;
+        })
         .map((n) => n.id)
     );
 
