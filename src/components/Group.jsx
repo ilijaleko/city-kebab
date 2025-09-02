@@ -18,11 +18,30 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { collection, getDocs, updateDoc } from "firebase/firestore";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen, Save, Star, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { db } from "../firebase";
+import {
+  deleteRecipe,
+  getSavedRecipes,
+  saveRecipe,
+} from "../lib/recipeStorage";
+import { cn } from "../lib/utils";
+
+// Custom Recipe Card component with smaller padding
+function RecipeCard({ className, ...props }) {
+  return (
+    <div
+      className={cn(
+        "bg-card text-card-foreground flex flex-col rounded-xl border shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  );
+}
 
 function Group() {
   const { groupId } = useParams();
@@ -42,6 +61,10 @@ function Group() {
   const [groupExists, setGroupExists] = useState(true);
   const [hasCheese, setHasCheese] = useState(false);
   const [sauce, setSauce] = useState("");
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const [showSaveRecipeModal, setShowSaveRecipeModal] = useState(false);
+  const [recipeName, setRecipeName] = useState("");
+  const [showSavedRecipes, setShowSavedRecipes] = useState(false);
 
   const kebabTypes = [
     "pecivo",
@@ -102,6 +125,11 @@ function Group() {
       setHasCheese(false);
     }
   }, [kebabType, shouldShowCheese]);
+
+  // Load saved recipes on component mount
+  useEffect(() => {
+    setSavedRecipes(getSavedRecipes());
+  }, []);
 
   // Fetch group orders
   useEffect(() => {
@@ -169,6 +197,68 @@ function Group() {
       kebabTypeRef.current?.focus();
     }
     setAdding(false);
+  };
+
+  // Save current kebab configuration as a recipe
+  const handleSaveRecipe = async () => {
+    const recipe = {
+      name: recipeName.trim(),
+      userName: name.trim() || null,
+      kebabType,
+      kebabSize: shouldShowSize ? kebabSize : null,
+      adds: selectedAdds,
+      hasCheese: shouldShowCheese ? hasCheese : null,
+      sauce: sauce,
+    };
+
+    const success = saveRecipe(recipe);
+
+    if (success) {
+      setSavedRecipes(getSavedRecipes());
+      setRecipeName("");
+      setShowSaveRecipeModal(false);
+      toast.success("Recept je uspješno spremljen!");
+    } else {
+      toast.error("Greška pri spremanju recepta!");
+    }
+  };
+
+  // Load a saved recipe into the form
+  const handleLoadRecipe = (recipe) => {
+    setKebabType(recipe.kebabType);
+    setKebabSize(recipe.kebabSize || "");
+    setSelectedAdds(recipe.adds || []);
+    setHasCheese(recipe.hasCheese || false);
+    setSauce(recipe.sauce || "");
+    setName(recipe.userName || "");
+    setShowSavedRecipes(false);
+    toast.success(`Recept "${recipe.name}" je učitan!`);
+  };
+
+  // Delete a saved recipe
+  const handleDeleteRecipe = (recipeId, recipeName) => {
+    const success = deleteRecipe(recipeId);
+
+    if (success) {
+      setSavedRecipes(getSavedRecipes());
+      toast.success(`Recept "${recipeName}" je obrisan!`);
+    } else {
+      toast.error("Greška pri brisanju recepta!");
+    }
+  };
+
+  // Check if current form has valid recipe data
+  const canSaveRecipe = () => {
+    if (!kebabType || !sauce) {
+      return false;
+    }
+
+    // For kebab types that require size, ensure size is selected
+    if (shouldShowSize && !kebabSize) {
+      return false;
+    }
+
+    return true;
   };
 
   const handleCopy = () => {
@@ -519,14 +609,43 @@ function Group() {
                 </Card>
               )}
 
-              <Button
-                type="submit"
-                className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base cursor-pointer"
-                size="lg"
-                disabled={adding}
-              >
-                {adding ? "Dodavanje..." : "Dodaj narudžbu"}
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base cursor-pointer"
+                  size="lg"
+                  disabled={adding}
+                >
+                  {adding ? "Dodavanje..." : "Dodaj narudžbu"}
+                </Button>
+
+                {/* Recipe Management Buttons */}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1 border-orange-300 text-orange-600 hover:bg-orange-50 cursor-pointer"
+                    onClick={() => setShowSaveRecipeModal(true)}
+                    disabled={!canSaveRecipe() || adding}
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    Spremi recept
+                  </Button>
+
+                  {savedRecipes.length > 0 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex-1 border-blue-300 text-blue-600 hover:bg-blue-50 cursor-pointer"
+                      onClick={() => setShowSavedRecipes(true)}
+                      disabled={adding}
+                    >
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Moji recepti ({savedRecipes.length})
+                    </Button>
+                  )}
+                </div>
+              </div>
 
               {inputError && (
                 <p className="text-sm text-destructive text-center font-medium">
@@ -676,6 +795,227 @@ function Group() {
                   onClick={() => setShowSmsFormat(false)}
                   variant="outline"
                   className="flex-1 border-orange-300 text-orange-600 hover:bg-orange-50 cursor-pointer"
+                >
+                  Zatvori
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Save Recipe Modal */}
+      {showSaveRecipeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl font-bold text-orange-600">
+                  <Save className="h-5 w-5 inline mr-2" />
+                  Spremi recept
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setShowSaveRecipeModal(false);
+                    setRecipeName("");
+                  }}
+                  className="cursor-pointer"
+                >
+                  ✕
+                </Button>
+              </div>
+              <CardDescription>
+                Spremite trenutnu konfiguraciju kebaba kao recept
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Ime recepta *
+                </label>
+                <Input
+                  type="text"
+                  placeholder="npr. Moj omiljeni kebab"
+                  value={recipeName}
+                  onChange={(e) => setRecipeName(e.target.value)}
+                  className="h-11 w-full"
+                  maxLength={50}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && recipeName.trim()) {
+                      handleSaveRecipe();
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Recipe Preview */}
+              <div className="bg-muted/30 p-3 rounded-lg">
+                <h4 className="text-sm font-medium text-foreground mb-2">
+                  Pregled recepta:
+                </h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  {name && (
+                    <p>
+                      <strong>Ime:</strong> {name}
+                    </p>
+                  )}
+                  <p>
+                    <strong>Kebab:</strong> {kebabType}
+                  </p>
+                  {shouldShowSize && kebabSize && (
+                    <p>
+                      <strong>Veličina:</strong> {kebabSize}
+                    </p>
+                  )}
+                  {sauce && (
+                    <p>
+                      <strong>Umak:</strong> {sauce}
+                    </p>
+                  )}
+                  {shouldShowCheese && hasCheese && (
+                    <p>
+                      <strong>Sir:</strong> Da
+                    </p>
+                  )}
+                  {selectedAdds.length > 0 && (
+                    <p>
+                      <strong>Dodaci:</strong> {selectedAdds.join(", ")}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                <Button
+                  onClick={handleSaveRecipe}
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+                  disabled={!recipeName.trim()}
+                >
+                  {"Spremi recept"}
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowSaveRecipeModal(false);
+                    setRecipeName("");
+                  }}
+                  variant="outline"
+                  className="flex-1 border-orange-300 text-orange-600 hover:bg-orange-50 cursor-pointer"
+                >
+                  Odustani
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Saved Recipes Modal */}
+      {showSavedRecipes && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-2xl max-h-[80vh] overflow-hidden">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl font-bold text-orange-600">
+                  <BookOpen className="h-5 w-5 inline mr-2" />
+                  Moji recepti
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowSavedRecipes(false)}
+                  className="cursor-pointer"
+                >
+                  ✕
+                </Button>
+              </div>
+              <CardDescription>Odaberite svoj omiljeni recept</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="max-h-96 overflow-y-auto space-y-3 pr-2">
+                {savedRecipes.length === 0 ? (
+                  <div className="text-center py-6">
+                    <div className="text-4xl mb-4">📝</div>
+                    <p className="text-muted-foreground">
+                      Još nemate spremljenih recepata
+                    </p>
+                  </div>
+                ) : (
+                  savedRecipes.map((recipe) => (
+                    <RecipeCard key={recipe.id}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Star className="h-4 w-4 text-orange-500" />
+                              <h4 className="font-medium text-foreground truncate">
+                                {recipe.name}
+                              </h4>
+                            </div>
+                            <div className="text-sm text-muted-foreground space-y-1">
+                              {recipe.userName && (
+                                <p>
+                                  <strong>Ime:</strong> {recipe.userName}
+                                </p>
+                              )}
+                              <p>
+                                <strong>Kebab:</strong> {recipe.kebabType}
+                              </p>
+                              {recipe.kebabSize && (
+                                <p>
+                                  <strong>Veličina:</strong> {recipe.kebabSize}
+                                </p>
+                              )}
+                              {recipe.sauce && (
+                                <p>
+                                  <strong>Umak:</strong> {recipe.sauce}
+                                </p>
+                              )}
+                              {recipe.hasCheese && (
+                                <p>
+                                  <strong>Sir:</strong> Da
+                                </p>
+                              )}
+                              {recipe.adds && recipe.adds.length > 0 && (
+                                <p>
+                                  <strong>Dodaci:</strong>{" "}
+                                  {recipe.adds.join(", ")}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => handleLoadRecipe(recipe)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                            >
+                              Učitaj
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                handleDeleteRecipe(recipe.id, recipe.name)
+                              }
+                              className="border-red-300 text-red-600 hover:bg-red-50 cursor-pointer"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </RecipeCard>
+                  ))
+                )}
+              </div>
+
+              <div className="flex justify-end">
+                <Button
+                  onClick={() => setShowSavedRecipes(false)}
+                  variant="outline"
+                  className="border-orange-300 text-orange-600 hover:bg-orange-50 cursor-pointer"
                 >
                   Zatvori
                 </Button>
