@@ -1,4 +1,4 @@
-import { GitHub, Star } from "lucide-react";
+import { Github, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function GitHubStar({
@@ -73,7 +73,7 @@ export function GitHubStar({
       `}
     >
       <div className="flex items-center gap-1.5">
-        <GitHub
+        <Github
           className={`${iconSizes[size]} text-orange-600 dark:text-orange-400`}
         />
         <Star className={`${iconSizes[size]} text-orange-500`} />
