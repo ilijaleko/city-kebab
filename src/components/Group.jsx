@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { GitHubStar } from "@/components/ui/github-star";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -404,7 +405,10 @@ function Group() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Početna
           </Button>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            <GitHubStar size="sm" showText={true} className="hover:shadow-md" />
+            <ThemeToggle />
+          </div>
         </div>
         <Card className="shadow-lg">
           <CardHeader className="space-y-4">

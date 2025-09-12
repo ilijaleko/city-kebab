@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { GitHubStar } from "@/components/ui/github-star";
 import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -220,7 +221,10 @@ function Home() {
           </CardContent>
         </Card>
       </div>
-      <footer className="mt-8 text-xs text-muted-foreground text-center max-w-md">
+      <footer className="mt-8 text-xs text-muted-foreground text-center max-w-md space-y-4">
+        <div className="flex justify-center">
+          <GitHubStar size="sm" showText={true} className="hover:shadow-md" />
+        </div>
         <p>
           Made with ❤️ by{" "}
           <a
