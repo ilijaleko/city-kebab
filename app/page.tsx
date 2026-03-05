@@ -1,7 +1,19 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl font-bold">City Kebab - Coming Soon</h1>
-    </main>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-100">
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-orange-600">City Kebab</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+            Test Button
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
