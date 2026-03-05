@@ -32,6 +32,7 @@
     "step3Desc": "Copy the generated SMS from the group and send it to the restaurant number.",
     "step4Title": "Pick up your order",
     "step4Desc": "Pick up the order at City Kebab at the agreed time. Everything will be ready.",
+    "or": "or",
     "madeBy": "Made with love by"
   },
   "group": {

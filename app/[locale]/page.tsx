@@ -38,7 +38,7 @@ export default function Home() {
       const result = await checkAndJoinGroup(groupCode, locale);
       if (result?.error === "not_found") {
         setGroupError(
-          t("groupNotFound", { code: groupCode.toUpperCase().trim() })
+          t("groupNotFound", { code: groupCode.toUpperCase().trim() }),
         );
       }
     });
@@ -73,7 +73,9 @@ export default function Home() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">or</span>
+                <span className="bg-card px-2 text-muted-foreground">
+                  {t("or")}
+                </span>
               </div>
             </div>
 
@@ -130,9 +132,7 @@ export default function Home() {
                   {step}
                 </div>
                 <div>
-                  <p className="font-medium text-sm">
-                    {t(`step${step}Title`)}
-                  </p>
+                  <p className="font-medium text-sm">{t(`step${step}Title`)}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {t(`step${step}Desc`)}
                   </p>
@@ -163,3 +163,4 @@ export default function Home() {
     </div>
   );
 }
+
