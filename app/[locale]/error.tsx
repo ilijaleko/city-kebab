@@ -8,13 +8,16 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-amber-100 via-orange-50 to-yellow-50 dark:from-amber-950 dark:via-stone-950 dark:to-stone-900 flex items-center justify-center p-4">
       <div className="text-center space-y-4">
-        <h2 className="text-xl font-bold">Something went wrong</h2>
-        <p className="text-muted-foreground text-sm">{error.message}</p>
+        <div className="text-4xl">🥙</div>
+        <h2 className="font-playfair text-xl font-bold text-stone-900 dark:text-amber-50">
+          Something went wrong
+        </h2>
+        <p className="text-sm text-stone-500 dark:text-amber-300/50">{error.message}</p>
         <button
           onClick={reset}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm"
+          className="bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-5 py-2 rounded-xl text-sm font-medium cursor-pointer shadow-md"
         >
           Try again
         </button>

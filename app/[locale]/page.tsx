@@ -116,7 +116,7 @@ export default function Home() {
       {/* Warm color blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-orange-300/30 dark:bg-orange-900/20 blur-3xl" />
-        <div className="absolute top-1/3 -left-40 w-80 h-80 rounded-full bg-red-200/25 dark:bg-red-900/15 blur-3xl" />
+        <div className="absolute top-1/3 -left-40 w-80 h-80 rounded-full bg-orange-200/25 dark:bg-orange-900/15 blur-3xl" />
         <div className="absolute top-2/3 -right-20 w-72 h-72 rounded-full bg-amber-300/20 dark:bg-amber-800/15 blur-3xl" />
         <div className="absolute bottom-0 left-1/4 w-96 h-64 rounded-full bg-yellow-200/30 dark:bg-yellow-900/10 blur-3xl" />
       </div>
@@ -143,7 +143,7 @@ export default function Home() {
           </div>
           <h1 className="font-playfair text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-stone-900 dark:text-amber-50 leading-none">
             City{" "}
-            <span className="text-red-700 dark:text-orange-400">Kebab</span>
+            <span className="text-orange-600 dark:text-orange-400">Kebab</span>
           </h1>
 
           <div className={`mt-2 sm:mt-3 inline-flex items-center gap-1.5 text-xs sm:text-sm ${status === "open" ? "text-green-700 dark:text-green-400" : status === "closing" ? "text-yellow-700 dark:text-yellow-400" : "text-stone-500 dark:text-amber-400/50"}`}>
@@ -196,7 +196,7 @@ export default function Home() {
         {/* Our Story */}
         <section className="py-6 sm:py-8 animate-fade-in">
           <div className="text-center mb-4 sm:mb-6">
-            <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-red-700/60 dark:text-orange-400/60 font-medium">
+            <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-orange-600/60 dark:text-orange-400/60 font-medium">
               {t("storyLabel")}
             </span>
             <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-900 dark:text-amber-50 mt-1">
@@ -204,7 +204,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="vintage-paper bg-white/50 dark:bg-stone-900/50 rounded-xl sm:rounded-2xl border border-orange-300/40 dark:border-amber-700/30 p-5 sm:p-8 backdrop-blur-sm">
-            <p className="text-stone-700 dark:text-amber-100/80 text-sm leading-relaxed sm:text-base sm:leading-relaxed first-letter:text-3xl first-letter:font-playfair first-letter:font-bold first-letter:text-red-700 dark:first-letter:text-orange-400 first-letter:mr-1 first-letter:float-left">
+            <p className="text-stone-700 dark:text-amber-100/80 text-sm leading-relaxed sm:text-base sm:leading-relaxed first-letter:text-3xl first-letter:font-playfair first-letter:font-bold first-letter:text-orange-600 dark:first-letter:text-orange-400 first-letter:mr-1 first-letter:float-left">
               {t("storyText")}
             </p>
             <p className="text-stone-700 dark:text-amber-100/80 text-sm leading-relaxed sm:text-base sm:leading-relaxed mt-3 sm:mt-4">
@@ -226,7 +226,7 @@ export default function Home() {
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <div className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-orange-200 to-amber-200 dark:from-orange-800/40 dark:to-amber-800/40 mb-1.5 sm:mb-2">
-                    <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-red-700 dark:text-orange-400" />
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600 dark:text-orange-400" />
                   </div>
                   <h3 className="font-playfair font-bold text-xs sm:text-sm text-stone-900 dark:text-amber-50">
                     {t(`quality${key}`)}
@@ -245,7 +245,7 @@ export default function Home() {
         {/* Reviews */}
         <section className="py-6 sm:py-8">
           <div className="text-center mb-4 sm:mb-6">
-            <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-red-700/60 dark:text-orange-400/60 font-medium">
+            <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-orange-600/60 dark:text-orange-400/60 font-medium">
               {t("reviewsSubtitle")}
             </span>
             <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-900 dark:text-amber-50 mt-1">
@@ -260,12 +260,12 @@ export default function Home() {
                 className="vintage-paper bg-white/50 dark:bg-stone-900/40 rounded-xl border border-orange-300/30 dark:border-amber-700/25 p-4 sm:p-6 animate-fade-up backdrop-blur-sm"
                 style={{ animationDelay: `${i * 150}ms` }}
               >
-                <Quote className="h-4 w-4 sm:h-5 sm:w-5 text-red-700/25 dark:text-orange-400/25 mb-1.5 sm:mb-2" />
+                <Quote className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600/25 dark:text-orange-400/25 mb-1.5 sm:mb-2" />
                 <p className="font-playfair italic text-stone-800 dark:text-amber-100/80 text-sm leading-relaxed sm:text-base sm:leading-relaxed">
                   {t(`review${num}Text`)}
                 </p>
                 <div className="mt-3 sm:mt-4 flex items-center gap-2.5 sm:gap-3">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-orange-300 to-red-300 dark:from-orange-700/50 dark:to-red-800/50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 dark:from-orange-700/50 dark:to-amber-700/50 flex items-center justify-center flex-shrink-0">
                     <span className="font-playfair text-xs sm:text-sm font-bold text-white dark:text-amber-100">
                       {t(`review${num}Author`).charAt(0)}
                     </span>
@@ -300,7 +300,7 @@ export default function Home() {
             <Button
               onClick={handleCreate}
               disabled={isCreating}
-              className="w-full bg-red-700 hover:bg-red-800 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer h-11 sm:h-12 font-bold rounded-xl text-sm sm:text-base shadow-md shadow-red-900/20 dark:shadow-orange-900/30"
+              className="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer h-11 sm:h-12 font-bold rounded-xl text-sm sm:text-base shadow-md shadow-orange-900/20 dark:shadow-orange-900/30"
             >
               {isCreating ? t("creating") : t("createOrder")}
             </Button>
@@ -341,7 +341,7 @@ export default function Home() {
                 <Button
                   variant="link"
                   onClick={handleCreate}
-                  className="text-red-700 dark:text-orange-400 p-0 h-auto mt-1 cursor-pointer text-xs"
+                  className="text-orange-600 dark:text-orange-400 p-0 h-auto mt-1 cursor-pointer text-xs"
                 >
                   {t("createNewInstead")}
                 </Button>
@@ -362,7 +362,7 @@ export default function Home() {
               return (
                 <li key={step} className="flex gap-2.5 sm:gap-3 items-start">
                   <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-orange-200 to-amber-200 dark:from-orange-800/40 dark:to-amber-800/40 flex items-center justify-center mt-0.5">
-                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-red-700 dark:text-orange-400" />
+                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-600 dark:text-orange-400" />
                   </div>
                   <span className="text-xs sm:text-sm">
                     <span className="font-medium text-stone-800 dark:text-amber-100">
@@ -388,7 +388,7 @@ export default function Home() {
               href="https://ilijaleko.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-700 dark:text-orange-400 hover:underline"
+              className="text-orange-600 dark:text-orange-400 hover:underline"
             >
               Ilija
             </a>

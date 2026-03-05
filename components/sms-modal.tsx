@@ -3,13 +3,6 @@
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { Copy, X } from "lucide-react";
 
 type Order = {
@@ -74,32 +67,36 @@ export function SmsModal({ orders, open, onClose }: SmsModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <Card className="w-full max-w-md mx-4 shadow-lg max-h-[80vh] flex flex-col">
-        <CardHeader className="flex-shrink-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="w-full max-w-md mx-4 bg-white/95 dark:bg-stone-900/95 rounded-2xl border border-orange-300/40 dark:border-amber-700/30 shadow-2xl max-h-[80vh] flex flex-col overflow-hidden">
+        <div className="flex-shrink-0 p-5 sm:p-6 border-b border-orange-200/40 dark:border-amber-800/20">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>{t("smsTitle")}</CardTitle>
-              <CardDescription>{t("smsSubtitle")}</CardDescription>
+              <h2 className="font-playfair text-lg font-bold text-stone-900 dark:text-amber-50">
+                {t("smsTitle")}
+              </h2>
+              <p className="text-xs text-stone-500 dark:text-amber-300/50 mt-0.5">
+                {t("smsSubtitle")}
+              </p>
             </div>
             <Button
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               onClick={onClose}
-              className="cursor-pointer"
+              className="cursor-pointer h-8 w-8 text-stone-400 dark:text-amber-400/40"
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
-        </CardHeader>
-        <CardContent className="flex-1 overflow-y-auto space-y-4">
-          <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-md font-mono">
+        </div>
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+          <pre className="whitespace-pre-wrap text-sm bg-amber-50/50 dark:bg-stone-800/50 text-stone-700 dark:text-amber-100/80 p-4 rounded-xl font-mono border border-orange-200/30 dark:border-amber-700/20">
             {smsText}
           </pre>
           <div className="flex gap-2">
             <Button
               onClick={handleCopy}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+              className="flex-1 bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer rounded-xl"
             >
               <Copy className="h-4 w-4 mr-2" />
               {t("copySms")}
@@ -107,13 +104,13 @@ export function SmsModal({ orders, open, onClose }: SmsModalProps) {
             <Button
               variant="outline"
               onClick={onClose}
-              className="cursor-pointer"
+              className="cursor-pointer rounded-xl"
             >
               {tCommon("close")}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

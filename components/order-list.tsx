@@ -4,7 +4,6 @@ import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ADDONS_EMOJIS } from "@/lib/kebab-config";
 import { deleteOrder } from "@/lib/actions/orders";
@@ -59,7 +58,7 @@ function OrderDeleteButton({ orderId }: { orderId: string }) {
       size="icon"
       onClick={handleDelete}
       disabled={isPending}
-      className="h-8 w-8 flex-shrink-0 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 cursor-pointer"
+      className="h-8 w-8 flex-shrink-0 text-stone-400 dark:text-amber-400/30 hover:text-red-500 hover:bg-red-50/50 dark:hover:bg-red-950/20 cursor-pointer"
     >
       <Trash2 className={`h-4 w-4 ${isPending ? "animate-pulse" : ""}`} />
     </Button>
@@ -76,28 +75,31 @@ export function OrderList({
 
   if (orders.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        <p>{tGroup("noOrders")}</p>
+      <div className="text-center py-8 text-stone-400 dark:text-amber-400/30">
+        <p className="text-sm">{tGroup("noOrders")}</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {orders.map((order, index) => (
-        <Card key={order.id} className="py-3">
-          <CardContent className="flex items-start gap-3 px-4">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
+        <div
+          key={order.id}
+          className="bg-white/50 dark:bg-stone-900/40 rounded-xl border border-orange-300/30 dark:border-amber-700/25 p-3.5 sm:p-4 backdrop-blur-sm"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 dark:from-orange-700/50 dark:to-amber-700/50 text-white dark:text-amber-100 flex items-center justify-center text-sm font-bold font-playfair">
               {order.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-sm">{order.name}</span>
-                <span className="text-xs text-muted-foreground">
+                <span className="font-medium text-sm text-stone-900 dark:text-amber-50">{order.name}</span>
+                <span className="text-[10px] text-stone-400 dark:text-amber-400/30">
                   #{index + 1}
                 </span>
               </div>
-              <div className="text-xs text-muted-foreground mt-0.5 space-y-0.5">
+              <div className="text-xs text-stone-500 dark:text-amber-200/50 mt-0.5 space-y-0.5">
                 <p>
                   {t(`types.${getTypeTranslationKey(order.kebabType)}`)}
                   {order.kebabSize && ` - ${t(`sizes.${order.kebabSize}`)}`}
@@ -124,10 +126,9 @@ export function OrderList({
               (isGroupCreator || currentUserId === order.userId) && (
                 <OrderDeleteButton orderId={order.id} />
               )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ))}
     </div>
   );
 }
-
