@@ -1,76 +1,101 @@
-# 🥙 City Kebab - Grupna Narudžba
+# City Kebab - Grupna Narudzba
 
-> **Napravite grupnu narudžbu s prijateljima u City Kebabu - brzo, jednostavno i praktično!**
+> **Napravite grupnu naruzbu s prijateljima u City Kebabu - brzo, jednostavno i prakticno!**
 
-[![Live Production](https://img.shields.io/badge/Live%20Production-https://kebab.ilijaleko.com/-orange?style=for-the-badge&logo=firebase)](https://kebab.ilijaleko.com/)
-[![React](https://img.shields.io/badge/React-19.1.0-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-12.0.0-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.11-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Live Production](https://img.shields.io/badge/Live-kebab.ilijaleko.com-orange?style=for-the-badge)](https://kebab.ilijaleko.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
-## O aplikaciji
+## About
 
-**City Kebab** je web aplikacija za grupne narudžbe u bjelovarskom City Kebabu. Omogućava prijateljima da se organiziraju, dodaju svoje kebab kombinacije u zajedničku narudžbu i generiraju SMS format za slanje restoranu.
+**City Kebab** is a web app for group kebab orders at City Kebab Bjelovar. Friends can organize, add their kebab combinations to a shared order, and generate SMS format for the restaurant.
 
-### Ključne značajke
+### Features
 
-- 🎯 **Grupne narudžbe** - Kreirajte grupe i pozovite prijatelje
-- 📱 **SMS format** - Automatski generirani SMS za slanje
-- 💾 **Spremanje recepata** - Sačuvajte omiljene kombinacije
-- 📲 **PWA** - Instalirajte na mobitel kao aplikaciju
-- 🌙 **Dark/Light mode** - Prilagodite sučelje
-- 📱 **Responsive** - Radi na svim uređajima
+- **Group orders** - Create groups with shareable short codes
+- **SMS format** - Auto-generated SMS to send to the restaurant
+- **User accounts** - Sign in with Clerk to save recipes and view order history
+- **Saved recipes** - Save favorite kebab configurations to your account
+- **Order history** - View all past orders in your dashboard
+- **i18n** - Croatian and English language support
+- **Dark/Light mode** - System, light, or dark theme
+- **Responsive** - Works on all devices
 
-## Kako funkcionira?
+## Tech Stack
 
-1. **Kreirajte narudžbu** - Kliknite "Kreiraj narudžbu" i podijelite ID grupe
-2. **Dodajte svoju narudžbu** - Odaberite vrstu kebaba, veličinu, dodatke i umak
-3. **Generirajte SMS** - Kliknite "Generiraj SMS format" i pošaljite restoranu
-4. **Preuzmite narudžbu** - Idite u City Kebab u dogovoreno vrijeme
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16+ (App Router) |
+| Language | TypeScript |
+| Auth | Clerk |
+| Database | PostgreSQL |
+| ORM | Prisma 7 |
+| UI | shadcn/ui + Tailwind CSS v4 |
+| i18n | next-intl |
+| Deployment | Docker + Coolify |
 
-## Pokretanje lokalno
+## Local Development
+
+### Prerequisites
+
+- Node.js 22+
+- Docker (for PostgreSQL)
+- Clerk account (for authentication)
+
+### Setup
 
 ```bash
-# Klonirajte repozitorij
+# Clone the repository
 git clone https://github.com/ilijaleko/city-kebab.git
 cd city-kebab
 
-# Instalirajte potrebne pakete
+# Install dependencies
 npm install
 
-# Pokrenite development server
+# Copy environment variables
+cp .env.example .env.local
+# Edit .env.local with your Clerk keys
+
+# Start PostgreSQL
+docker compose up -d db
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
 npm run dev
 ```
 
-Aplikacija će biti dostupna na `http://localhost:5173`
+The app will be available at `http://localhost:3000`
 
-## Konfiguracija Firebase
+### Environment Variables
 
-1. Kreirajte Firebase projekt na [Firebase Console](https://console.firebase.google.com/)
-2. Omogućite Firestore Database
-3. Kopirajte konfiguraciju u `src/firebase.ts`
-4. Deploy: `firebase deploy`
+```env
+DATABASE_URL="postgresql://citykebab:citykebab@localhost:5433/citykebab"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/hr/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/hr/sign-up
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-### Instalacija na mobitel
+### Docker Build
 
-**Android:** Chrome/Edge → "..." meni → "Instaliraj aplikaciju"
-**iPhone:** Safari → "Dijeli" → "Dodaj na početni ekran"
+```bash
+docker build -t city-kebab .
+docker run -p 3000:3000 --env-file .env.local city-kebab
+```
 
-## Suradnja
+## Contributing
 
-1. **Kreirajte issue** - Diskutirajte feature/bug prije rada
-2. **Fork** repozitorij
-3. **Kreirajte** feature branch (`git checkout -b feature/i-<issue-number>/AmazingFeature`)
-4. **Commit** promjene (`git commit -m 'Add some AmazingFeature'`)
-5. **Push** na branch (`git push origin feature/i-<issue-number>AmazingFeature`)
-6. **Otvori** Pull Request
+1. Create an issue to discuss the feature/bug
+2. Fork the repository
+3. Create a feature branch (`git checkout -b feature/amazing-feature`)
+4. Commit your changes
+5. Push and open a Pull Request
 
-### Development Guidelines
-
-- Koristite ESLint za code quality
-- Pišite jasne commit poruke
-- Testirajte promjene na različitim uređajima
-
-## Autor
+## Author
 
 **Ilija Leko**
 
@@ -81,8 +106,6 @@ Aplikacija će biti dostupna na `http://localhost:5173`
 
 <div align="center">
 
-**Od ❤️ za City Kebab**
-
-[🌐 Live production](https://kebab.ilijaleko.com/) | [📧 Kontakt](mailto:ilija.leko.hr@gmail.com) | [🐛 Report Bug](https://github.com/ilijaleko/city-kebab/issues)
+[Live production](https://kebab.ilijaleko.com/) | [Report Bug](https://github.com/ilijaleko/city-kebab/issues)
 
 </div>
