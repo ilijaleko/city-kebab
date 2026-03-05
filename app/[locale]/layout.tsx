@@ -6,7 +6,14 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Playfair_Display } from "next/font/google";
 import "../globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "City Kebab",
@@ -30,12 +37,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <ClerkProvider>
       <html lang={locale} suppressHydrationWarning>
-        <body>
+        <body className={playfair.variable}>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="light"
               storageKey="city-kebab-theme"
             >
               {children}
@@ -47,3 +53,4 @@ export default async function LocaleLayout({ children, params }: Props) {
     </ClerkProvider>
   );
 }
+
