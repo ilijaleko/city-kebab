@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
@@ -23,16 +23,18 @@ export default function SettingsPage() {
   const t = useTranslations("dashboard");
   const tCommon = useTranslations("common");
   const locale = useLocale();
-  const [defaultName, setDefaultName] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (stored) {
-      setDefaultName(stored);
-    }
+  const subscribe = useCallback((callback: () => void) => {
+    window.addEventListener("storage", callback);
+    return () => window.removeEventListener("storage", callback);
   }, []);
+
+  const storedName = useSyncExternalStore(
+    subscribe,
+    () => localStorage.getItem(LOCAL_STORAGE_KEY) ?? "",
+    () => ""
+  );
+
+  const [defaultName, setDefaultName] = useState(storedName);
 
   function handleSave() {
     localStorage.setItem(LOCAL_STORAGE_KEY, defaultName);
@@ -117,7 +119,7 @@ export default function SettingsPage() {
               <Input
                 value={defaultName}
                 onChange={(e) => setDefaultName(e.target.value)}
-                placeholder={mounted ? "" : ""}
+                placeholder=""
                 className="flex-1"
               />
               <Button
