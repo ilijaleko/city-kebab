@@ -31,6 +31,7 @@ type Order = {
 
 type GroupPageClientProps = {
   groupCode: string;
+  groupCreatorId?: string | null;
   orders: Order[];
   locale: string;
   userId?: string | null;
@@ -38,6 +39,7 @@ type GroupPageClientProps = {
 
 export function GroupPageClient({
   groupCode,
+  groupCreatorId,
   orders,
   locale,
   userId,
@@ -109,7 +111,11 @@ export function GroupPageClient({
             </div>
 
             {/* Order List */}
-            <OrderList orders={orders} currentUserId={userId} />
+            <OrderList
+              orders={orders}
+              currentUserId={userId}
+              isGroupCreator={!!userId && userId === groupCreatorId}
+            />
 
             {/* SMS Button */}
             {orders.length > 0 && (
@@ -137,7 +143,7 @@ export function GroupPageClient({
         open={smsOpen}
         onClose={() => setSmsOpen(false)}
       />
-
     </div>
   );
 }
+

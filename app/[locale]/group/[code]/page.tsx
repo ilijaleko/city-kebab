@@ -48,9 +48,11 @@ export default async function GroupPage({ params }: Props) {
   return (
     <GroupPageClient
       groupCode={group.code}
+      groupCreatorId={group.creatorId}
       orders={orders}
       locale={locale}
       userId={userId}
     />
   );
 }
+

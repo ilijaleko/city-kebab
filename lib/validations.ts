@@ -14,5 +14,5 @@ export const addOrderSchema = z.object({
   sauce: z.enum(SAUCE_OPTIONS),
   hasCheese: z.boolean().nullable(),
   adds: z.array(z.enum(KEBAB_ADDS)),
-  userId: z.string().nullable().optional(),
 });
+

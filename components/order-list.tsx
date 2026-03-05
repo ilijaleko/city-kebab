@@ -23,6 +23,7 @@ type Order = {
 type OrderListProps = {
   orders: Order[];
   currentUserId?: string | null;
+  isGroupCreator?: boolean;
 };
 
 function getTypeTranslationKey(type: string): string {
@@ -37,20 +38,14 @@ function getSauceTranslationKey(s: string): string {
     .replace("malo_manje", "manje");
 }
 
-function OrderDeleteButton({
-  orderId,
-  userId,
-}: {
-  orderId: string;
-  userId: string;
-}) {
+function OrderDeleteButton({ orderId }: { orderId: string }) {
   const [isPending, startTransition] = useTransition();
   const tGroup = useTranslations("group");
 
   function handleDelete() {
     startTransition(async () => {
       try {
-        await deleteOrder(orderId, userId);
+        await deleteOrder(orderId);
         toast.success(tGroup("orderDeleted"));
       } catch {
         toast.error(tGroup("deleteError"));
@@ -71,7 +66,11 @@ function OrderDeleteButton({
   );
 }
 
-export function OrderList({ orders, currentUserId }: OrderListProps) {
+export function OrderList({
+  orders,
+  currentUserId,
+  isGroupCreator,
+}: OrderListProps) {
   const t = useTranslations("kebab");
   const tGroup = useTranslations("group");
 
@@ -106,26 +105,29 @@ export function OrderList({ orders, currentUserId }: OrderListProps) {
                     ` - ${t("cheese")}: ${order.hasCheese ? t("cheeseYes") : t("cheeseNo")}`}
                 </p>
                 <p>
-                  {t("sauce")}: {t(`sauces.${getSauceTranslationKey(order.sauce)}`)}
+                  {t("sauce")}:{" "}
+                  {t(`sauces.${getSauceTranslationKey(order.sauce)}`)}
                 </p>
                 {order.adds.length > 0 && (
                   <p>
                     {order.adds
                       .map(
                         (addon) =>
-                          `${ADDONS_EMOJIS[addon] || ""} ${t(`adds.${addon.replace(/ /g, "_")}`)}`
+                          `${ADDONS_EMOJIS[addon] || ""} ${t(`adds.${addon.replace(/ /g, "_")}`)}`,
                       )
                       .join(", ")}
                   </p>
                 )}
               </div>
             </div>
-            {currentUserId && currentUserId === order.userId && (
-              <OrderDeleteButton orderId={order.id} userId={currentUserId} />
-            )}
+            {currentUserId &&
+              (isGroupCreator || currentUserId === order.userId) && (
+                <OrderDeleteButton orderId={order.id} />
+              )}
           </CardContent>
         </Card>
       ))}
     </div>
   );
 }
+

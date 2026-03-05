@@ -71,7 +71,7 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
 
   function toggleAddon(addon: string) {
     setAdds((prev) =>
-      prev.includes(addon) ? prev.filter((a) => a !== addon) : [...prev, addon]
+      prev.includes(addon) ? prev.filter((a) => a !== addon) : [...prev, addon],
     );
   }
 
@@ -115,11 +115,8 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
           kebabType,
           kebabSize: shouldShowSize(kebabType) ? kebabSize : null,
           sauce,
-          hasCheese: shouldShowCheese(kebabType)
-            ? hasCheese === "yes"
-            : null,
+          hasCheese: shouldShowCheese(kebabType) ? hasCheese === "yes" : null,
           adds,
-          userId,
         });
         toast.success(tGroup("orderAdded"));
         resetForm();
@@ -140,9 +137,7 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
           kebabType,
           kebabSize: shouldShowSize(kebabType) ? kebabSize : null,
           sauce,
-          hasCheese: shouldShowCheese(kebabType)
-            ? hasCheese === "yes"
-            : null,
+          hasCheese: shouldShowCheese(kebabType) ? hasCheese === "yes" : null,
           adds,
         });
         toast.success(tRecipe("saved"));
@@ -352,3 +347,4 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
     </div>
   );
 }
+
