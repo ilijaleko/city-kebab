@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Group {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  creatorId String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    String?
+  name      String
+  kebabType String
+  kebabSize String?
+  sauce     String
+  hasCheese Boolean?
+  adds      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recipe {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  userName  String?
+  kebabType String
+  kebabSize String?
+  sauce     String
+  hasCheese Boolean?
+  adds      String[]
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
