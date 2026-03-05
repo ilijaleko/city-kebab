@@ -1,8 +1,13 @@
 "use client";
 
+import { useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { ADDONS_EMOJIS } from "@/lib/kebab-config";
+import { deleteOrder } from "@/lib/actions/orders";
 
 type Order = {
   id: string;
@@ -32,7 +37,41 @@ function getSauceTranslationKey(s: string): string {
     .replace("malo_manje", "manje");
 }
 
-export function OrderList({ orders }: OrderListProps) {
+function OrderDeleteButton({
+  orderId,
+  userId,
+}: {
+  orderId: string;
+  userId: string;
+}) {
+  const [isPending, startTransition] = useTransition();
+  const tGroup = useTranslations("group");
+
+  function handleDelete() {
+    startTransition(async () => {
+      try {
+        await deleteOrder(orderId, userId);
+        toast.success(tGroup("orderDeleted"));
+      } catch {
+        toast.error(tGroup("deleteError"));
+      }
+    });
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleDelete}
+      disabled={isPending}
+      className="h-8 w-8 flex-shrink-0 text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 cursor-pointer"
+    >
+      <Trash2 className={`h-4 w-4 ${isPending ? "animate-pulse" : ""}`} />
+    </Button>
+  );
+}
+
+export function OrderList({ orders, currentUserId }: OrderListProps) {
   const t = useTranslations("kebab");
   const tGroup = useTranslations("group");
 
@@ -81,6 +120,9 @@ export function OrderList({ orders }: OrderListProps) {
                 )}
               </div>
             </div>
+            {currentUserId && currentUserId === order.userId && (
+              <OrderDeleteButton orderId={order.id} userId={currentUserId} />
+            )}
           </CardContent>
         </Card>
       ))}

@@ -22,7 +22,17 @@ import {
   shouldShowSize,
   shouldShowCheese,
 } from "@/lib/kebab-config";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { BookmarkPlus } from "lucide-react";
 import { addOrder } from "@/lib/actions/orders";
+import { saveRecipe } from "@/lib/actions/recipes";
 
 type OrderFormProps = {
   groupCode: string;
@@ -32,7 +42,10 @@ type OrderFormProps = {
 export function OrderForm({ groupCode, userId }: OrderFormProps) {
   const t = useTranslations("kebab");
   const tGroup = useTranslations("group");
+  const tRecipe = useTranslations("recipe");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
+  const [isSavingRecipe, startRecipeTransition] = useTransition();
 
   const [name, setName] = useState("");
   const [kebabType, setKebabType] = useState("");
@@ -41,6 +54,8 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
   const [hasCheese, setHasCheese] = useState<string>("");
   const [adds, setAdds] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
+  const [recipeName, setRecipeName] = useState("");
 
   function getTypeTranslationKey(type: string): string {
     return type.replace(/ /g, "_");
@@ -110,6 +125,31 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
         resetForm();
       } catch {
         toast.error("Failed to add order");
+      }
+    });
+  }
+
+  function handleSaveRecipe() {
+    if (!recipeName.trim()) return;
+
+    startRecipeTransition(async () => {
+      try {
+        await saveRecipe({
+          name: recipeName.trim(),
+          userName: name.trim() || null,
+          kebabType,
+          kebabSize: shouldShowSize(kebabType) ? kebabSize : null,
+          sauce,
+          hasCheese: shouldShowCheese(kebabType)
+            ? hasCheese === "yes"
+            : null,
+          adds,
+        });
+        toast.success(tRecipe("saved"));
+        setRecipeDialogOpen(false);
+        setRecipeName("");
+      } catch {
+        toast.error("Failed to save recipe");
       }
     });
   }
@@ -255,6 +295,60 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
       >
         {isPending ? tGroup("adding") : tGroup("addOrder")}
       </Button>
+
+      {/* Save Recipe (signed-in users only) */}
+      {userId && (
+        <>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setRecipeDialogOpen(true)}
+            disabled={!kebabType || !sauce}
+            className="w-full cursor-pointer"
+          >
+            <BookmarkPlus className="h-4 w-4 mr-2" />
+            {tRecipe("save")}
+          </Button>
+
+          <Dialog open={recipeDialogOpen} onOpenChange={setRecipeDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{tRecipe("saveTitle")}</DialogTitle>
+                <DialogDescription>{tRecipe("saveSubtitle")}</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">
+                    {tRecipe("recipeName")}
+                  </label>
+                  <Input
+                    placeholder={tRecipe("recipeNamePlaceholder")}
+                    value={recipeName}
+                    onChange={(e) => setRecipeName(e.target.value)}
+                    maxLength={50}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setRecipeDialogOpen(false)}
+                  className="cursor-pointer"
+                >
+                  {tCommon("cancel")}
+                </Button>
+                <Button
+                  onClick={handleSaveRecipe}
+                  disabled={isSavingRecipe || !recipeName.trim()}
+                  className="bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+                >
+                  {isSavingRecipe ? tCommon("loading") : tCommon("save")}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
     </div>
   );
 }

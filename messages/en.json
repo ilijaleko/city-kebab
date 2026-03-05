@@ -54,7 +54,10 @@
     "notFound": "Oops! Group not found",
     "notFoundDesc": "This group doesn't exist or may have been deleted. Check the link or create a new group.",
     "goHome": "Go to homepage",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "orderDeleted": "Order deleted!",
+    "deleteError": "Failed to delete order",
+    "deleting": "Deleting..."
   },
   "kebab": {
     "name": "Name or nickname",

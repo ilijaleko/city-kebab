@@ -39,3 +39,45 @@ export async function addOrder(data: {
 
   revalidatePath(`/group/${parsed.groupCode}`);
 }
+
+export async function deleteOrder(orderId: string, userId: string) {
+  const order = await db.order.findUnique({ where: { id: orderId } });
+  if (!order) throw new Error("Order not found");
+  if (order.userId !== userId) throw new Error("Unauthorized");
+
+  const group = await db.group.findUnique({ where: { id: order.groupId } });
+  await db.order.delete({ where: { id: orderId } });
+  if (group) revalidatePath(`/group/${group.code}`);
+}
+
+export async function updateOrder(
+  data: {
+    orderId: string;
+    name: string;
+    kebabType: string;
+    kebabSize: string | null;
+    sauce: string;
+    hasCheese: boolean | null;
+    adds: string[];
+  },
+  userId: string
+) {
+  const order = await db.order.findUnique({ where: { id: data.orderId } });
+  if (!order) throw new Error("Order not found");
+  if (order.userId !== userId) throw new Error("Unauthorized");
+
+  await db.order.update({
+    where: { id: data.orderId },
+    data: {
+      name: data.name,
+      kebabType: data.kebabType,
+      kebabSize: data.kebabSize,
+      sauce: data.sauce,
+      hasCheese: data.hasCheese,
+      adds: data.adds,
+    },
+  });
+
+  const group = await db.group.findUnique({ where: { id: order.groupId } });
+  if (group) revalidatePath(`/group/${group.code}`);
+}

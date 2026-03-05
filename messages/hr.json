@@ -54,7 +54,10 @@
     "notFound": "Ups! Grupa nije pronadena",
     "notFoundDesc": "Izgleda da ova grupa ne postoji ili je mozda obrisana. Provjerite poveznicu ili stvorite novu grupu.",
     "goHome": "Idite na pocetnu",
-    "tryAgain": "Pokusajte ponovo"
+    "tryAgain": "Pokusajte ponovo",
+    "orderDeleted": "Naruzba obrisana!",
+    "deleteError": "Brisanje naruzbe nije uspjelo",
+    "deleting": "Brisanje..."
   },
   "kebab": {
     "name": "Ime ili nadimak",
