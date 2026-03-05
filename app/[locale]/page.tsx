@@ -147,12 +147,12 @@ export default function Home() {
           <p>
             {t("madeBy")}{" "}
             <a
-              href="https://github.com/isakovic"
+              href="https://ilijaleko.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-orange-500 hover:underline"
             >
-              Ilija Isakovic
+              Ilija
             </a>
           </p>
         </footer>
