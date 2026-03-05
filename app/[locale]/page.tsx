@@ -13,7 +13,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Toaster } from "@/components/ui/sonner";
+import { GitHubStar } from "@/components/github-star";
 import { createGroup, checkAndJoinGroup } from "@/lib/actions/groups";
 
 export default function Home() {
@@ -144,6 +144,9 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="mt-8 text-center text-xs text-muted-foreground pb-4">
+          <div className="flex justify-center mb-3">
+            <GitHubStar size="sm" showText />
+          </div>
           <p>
             {t("madeBy")}{" "}
             <a
@@ -157,7 +160,6 @@ export default function Home() {
           </p>
         </footer>
       </div>
-      <Toaster />
     </div>
   );
 }

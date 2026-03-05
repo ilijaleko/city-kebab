@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
 import { deleteRecipe } from "@/lib/actions/recipes";
 
 type RecipeListProps = {
@@ -46,22 +45,18 @@ export function RecipeList({ recipes }: RecipeListProps) {
 
   if (recipes.length === 0) {
     return (
-      <>
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-40" />
-            <p>{t("noRecipes")}</p>
-          </CardContent>
-        </Card>
-        <Toaster />
-      </>
+      <Card>
+        <CardContent className="py-8 text-center text-muted-foreground">
+          <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-40" />
+          <p>{t("noRecipes")}</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <>
-      <div className="space-y-3">
-        {recipes.map((recipe) => (
+    <div className="space-y-3">
+      {recipes.map((recipe) => (
           <Card key={recipe.id}>
             <CardHeader className="pb-0">
               <div className="flex items-center justify-between">
@@ -114,8 +109,6 @@ export function RecipeList({ recipes }: RecipeListProps) {
             </CardContent>
           </Card>
         ))}
-      </div>
-      <Toaster />
-    </>
+    </div>
   );
 }

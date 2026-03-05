@@ -15,7 +15,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Toaster } from "@/components/ui/sonner";
+import { GitHubStar } from "@/components/github-star";
 import { Copy, MessageSquare } from "lucide-react";
 
 type Order = {
@@ -59,6 +59,10 @@ export function GroupPageClient({
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-100 dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto max-w-md px-4 py-6">
         <Header showBack backHref={`/${locale}`} />
+
+        <div className="flex justify-end mb-4">
+          <GitHubStar size="sm" showText />
+        </div>
 
         {/* Main Card */}
         <Card className="shadow-lg">
@@ -134,7 +138,6 @@ export function GroupPageClient({
         onClose={() => setSmsOpen(false)}
       />
 
-      <Toaster />
     </div>
   );
 }

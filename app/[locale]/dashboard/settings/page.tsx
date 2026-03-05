@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { Toaster } from "@/components/ui/sonner";
 import Link from "next/link";
 import { ClipboardList, BookOpen, Settings } from "lucide-react";
 
@@ -142,7 +141,6 @@ export default function SettingsPage() {
         </Card>
       </div>
 
-      <Toaster />
     </div>
   );
 }
