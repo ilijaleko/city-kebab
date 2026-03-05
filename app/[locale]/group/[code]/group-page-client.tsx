@@ -33,12 +33,14 @@ type GroupPageClientProps = {
   groupCode: string;
   orders: Order[];
   locale: string;
+  userId?: string | null;
 };
 
 export function GroupPageClient({
   groupCode,
   orders,
   locale,
+  userId,
 }: GroupPageClientProps) {
   const t = useTranslations("group");
   const [smsOpen, setSmsOpen] = useState(false);
@@ -88,7 +90,7 @@ export function GroupPageClient({
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Order Form */}
-            <OrderForm groupCode={groupCode} />
+            <OrderForm groupCode={groupCode} userId={userId} />
 
             {/* Divider */}
             <div className="relative">
@@ -103,7 +105,7 @@ export function GroupPageClient({
             </div>
 
             {/* Order List */}
-            <OrderList orders={orders} />
+            <OrderList orders={orders} currentUserId={userId} />
 
             {/* SMS Button */}
             {orders.length > 0 && (
