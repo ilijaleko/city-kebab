@@ -24,16 +24,16 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16+ (App Router) |
-| Language | TypeScript |
-| Auth | Clerk |
-| Database | PostgreSQL |
-| ORM | Prisma 7 |
-| UI | shadcn/ui + Tailwind CSS v4 |
-| i18n | next-intl |
-| Deployment | Docker + Coolify |
+| Layer      | Technology                  |
+| ---------- | --------------------------- |
+| Framework  | Next.js 16+ (App Router)    |
+| Language   | TypeScript                  |
+| Auth       | Clerk                       |
+| Database   | PostgreSQL                  |
+| ORM        | Prisma 7                    |
+| UI         | shadcn/ui + Tailwind CSS v4 |
+| i18n       | next-intl                   |
+| Deployment | Docker + Coolify            |
 
 ## Local Development
 

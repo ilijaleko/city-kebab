@@ -11,16 +11,16 @@ Rebuild the City Kebab group ordering app from Vite + React + Firebase to Next.j
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16+ (App Router) |
-| Language | TypeScript |
-| Auth | Clerk |
-| Database | PostgreSQL (self-hosted on Coolify) |
-| ORM | Prisma |
-| UI | shadcn/ui + Tailwind CSS v4 |
-| i18n | next-intl (URL-based locales) |
-| Deployment | Dockerfile + Coolify |
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Framework  | Next.js 16+ (App Router)            |
+| Language   | TypeScript                          |
+| Auth       | Clerk                               |
+| Database   | PostgreSQL (self-hosted on Coolify) |
+| ORM        | Prisma                              |
+| UI         | shadcn/ui + Tailwind CSS v4         |
+| i18n       | next-intl (URL-based locales)       |
+| Deployment | Dockerfile + Coolify                |
 
 ---
 
@@ -94,6 +94,7 @@ model Recipe {
 ```
 
 **Key decisions:**
+
 - No `User` table - Clerk manages users, we store `userId` as a string reference
 - `Order.userId` is nullable - anonymous orders work, signed-in orders get linked
 - `Group.code` has a unique index for fast lookups by short code
@@ -135,6 +136,7 @@ Input validation with `zod` schemas in Server Actions.
 **Locales:** `hr` (default), `en`
 
 **Files:**
+
 ```
 messages/
   hr.json    # Croatian
@@ -142,6 +144,7 @@ messages/
 ```
 
 **Message structure:**
+
 ```json
 {
   "home": { "title": "...", "createOrder": "...", "joinGroup": "..." },
@@ -164,18 +167,20 @@ messages/
 
 **Header behavior:**
 
-| Context | Left | Right |
-|---|---|---|
+| Context                | Left                     | Right                                              |
+| ---------------------- | ------------------------ | -------------------------------------------------- |
 | Public (not signed in) | Back button (group page) | Language switcher, Theme toggle, "Prijavi se" link |
-| Public (signed in) | Back button (group page) | Language switcher, Theme toggle, Clerk UserButton |
-| Dashboard | Back to home | Language switcher, Theme toggle, Clerk UserButton |
+| Public (signed in)     | Back button (group page) | Language switcher, Theme toggle, Clerk UserButton  |
+| Dashboard              | Back to home             | Language switcher, Theme toggle, Clerk UserButton  |
 
 **Signed-in extras on group page:**
+
 - Edit/delete buttons on own orders (matched by `userId`)
 - "Save as recipe" button saves to DB
 - Link to order history in dashboard
 
 **Dashboard pages:**
+
 - **Order history** - paginated list of past orders across groups (group code, date, order details)
 - **Recipes** - saved recipes with load/edit/delete. "Use recipe" pre-fills form via URL param
 - **Settings** - preferred language, default name/nickname (auto-fills order form)
@@ -236,6 +241,7 @@ city-kebab/
 ## Deployment
 
 **Dockerfile** (multi-stage):
+
 1. `deps` stage - install dependencies
 2. `builder` stage - generate Prisma client, build Next.js
 3. `runner` stage - production image with standalone output
@@ -243,6 +249,7 @@ city-kebab/
 **Next.js config:** `output: "standalone"` for Docker.
 
 **Environment variables (Coolify):**
+
 ```
 DATABASE_URL=postgresql://user:pass@host:5432/citykebab
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...

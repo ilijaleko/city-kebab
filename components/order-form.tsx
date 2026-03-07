@@ -153,7 +153,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
     <div className="space-y-4">
       {/* Name */}
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("name")}</label>
+        <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+          {t("name")}
+        </label>
         <Input
           placeholder={t("namePlaceholder")}
           value={name}
@@ -168,7 +170,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
 
       {/* Kebab Type */}
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("type")}</label>
+        <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+          {t("type")}
+        </label>
         <Select
           value={kebabType}
           onValueChange={(val) => {
@@ -196,7 +200,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
       {/* Kebab Size (conditional) */}
       {shouldShowSize(kebabType) && (
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("size")}</label>
+          <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+            {t("size")}
+          </label>
           <Select value={kebabSize} onValueChange={setKebabSize}>
             <SelectTrigger className="w-full rounded-lg">
               <SelectValue placeholder={t("sizePlaceholder")} />
@@ -217,7 +223,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
 
       {/* Sauce */}
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("sauce")}</label>
+        <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+          {t("sauce")}
+        </label>
         <Select value={sauce} onValueChange={setSauce}>
           <SelectTrigger className="w-full rounded-lg">
             <SelectValue placeholder={t("saucePlaceholder")} />
@@ -238,7 +246,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
       {/* Cheese (conditional) */}
       {shouldShowCheese(kebabType) && (
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("cheese")}</label>
+          <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+            {t("cheese")}
+          </label>
           <Select value={hasCheese} onValueChange={setHasCheese}>
             <SelectTrigger className="w-full rounded-lg">
               <SelectValue placeholder={t("cheese")} />
@@ -254,13 +264,15 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
       {/* Addons */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-stone-800 dark:text-amber-100">{t("addons")}</label>
+          <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
+            {t("addons")}
+          </label>
           <Button
             type="button"
             variant="ghost"
             size="xs"
             onClick={toggleAllAddons}
-            className="cursor-pointer text-xs text-stone-500 dark:text-amber-300/50"
+            className="cursor-pointer text-xs text-stone-500 dark:text-stone-500"
           >
             {t("addonsAll")}
           </Button>
@@ -269,13 +281,13 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
           {KEBAB_ADDS.map((addon) => (
             <label
               key={addon}
-              className="flex items-center gap-2 cursor-pointer rounded-lg border border-orange-200/50 dark:border-amber-700/25 bg-white/40 dark:bg-stone-800/30 p-2.5 hover:bg-white/70 dark:hover:bg-stone-800/50 transition-colors"
+              className="flex items-center gap-2 cursor-pointer rounded-lg border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 p-2.5 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
             >
               <Checkbox
                 checked={adds.includes(addon)}
                 onCheckedChange={() => toggleAddon(addon)}
               />
-              <span className="text-sm text-stone-700 dark:text-amber-100/80">
+              <span className="text-sm text-stone-600 dark:text-stone-300">
                 {ADDONS_EMOJIS[addon]} {t(`adds.${addon.replace(/ /g, "_")}`)}
               </span>
             </label>
@@ -287,7 +299,7 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
       <Button
         onClick={handleSubmit}
         disabled={isPending}
-        className="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer rounded-xl h-11 font-bold shadow-md shadow-orange-900/20 dark:shadow-orange-900/30"
+        className="w-full bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900 text-white cursor-pointer rounded-xl h-11 font-bold shadow-sm"
       >
         {isPending ? tGroup("adding") : tGroup("addOrder")}
       </Button>
@@ -309,7 +321,9 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
           <Dialog open={recipeDialogOpen} onOpenChange={setRecipeDialogOpen}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="font-playfair">{tRecipe("saveTitle")}</DialogTitle>
+                <DialogTitle className="font-playfair">
+                  {tRecipe("saveTitle")}
+                </DialogTitle>
                 <DialogDescription>{tRecipe("saveSubtitle")}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
@@ -337,7 +351,7 @@ export function OrderForm({ groupCode, userId }: OrderFormProps) {
                 <Button
                   onClick={handleSaveRecipe}
                   disabled={isSavingRecipe || !recipeName.trim()}
-                  className="bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer rounded-lg"
+                  className="bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900 text-white cursor-pointer rounded-lg shadow-sm"
                 >
                   {isSavingRecipe ? tCommon("loading") : tCommon("save")}
                 </Button>

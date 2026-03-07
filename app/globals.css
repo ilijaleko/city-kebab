@@ -29,8 +29,8 @@
   --accent: oklch(0.93 0.025 75);
   --accent-foreground: oklch(0.25 0.04 55);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.90 0.03 75);
-  --input: oklch(0.90 0.03 75);
+  --border: oklch(0.9 0.03 75);
+  --input: oklch(0.9 0.03 75);
   --ring: oklch(0.65 0.14 55);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -43,7 +43,7 @@
   --sidebar-primary-foreground: oklch(0.98 0.005 75);
   --sidebar-accent: oklch(0.93 0.025 75);
   --sidebar-accent-foreground: oklch(0.25 0.04 55);
-  --sidebar-border: oklch(0.90 0.03 75);
+  --sidebar-border: oklch(0.9 0.03 75);
   --sidebar-ring: oklch(0.65 0.14 55);
 }
 
@@ -97,7 +97,7 @@ body {
 .dark {
   --background: oklch(0.16 0.02 55);
   --foreground: oklch(0.93 0.02 75);
-  --card: oklch(0.20 0.025 55);
+  --card: oklch(0.2 0.025 55);
   --card-foreground: oklch(0.93 0.02 75);
   --popover: oklch(0.22 0.025 55);
   --popover-foreground: oklch(0.93 0.02 75);
@@ -118,7 +118,7 @@ body {
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.20 0.025 55);
+  --sidebar: oklch(0.2 0.025 55);
   --sidebar-foreground: oklch(0.93 0.02 75);
   --sidebar-primary: oklch(0.72 0.16 55);
   --sidebar-primary-foreground: oklch(0.93 0.02 75);
@@ -143,40 +143,80 @@ body {
 
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
-.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
 
 @keyframes stamp-in {
-  0% { transform: scale(1.8) rotate(-8deg); opacity: 0; }
-  60% { transform: scale(0.95) rotate(2deg); opacity: 1; }
-  100% { transform: scale(1) rotate(-3deg); opacity: 1; }
+  0% {
+    transform: scale(1.8) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.95) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-3deg);
+    opacity: 1;
+  }
 }
 
-.animate-stamp { animation: stamp-in 0.6s ease-out forwards; }
+.animate-stamp {
+  animation: stamp-in 0.6s ease-out forwards;
+}
 
 @keyframes fade-up {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animate-fade-up { animation: fade-up 0.5s ease-out forwards; }
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out forwards;
+}
 
 @keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-.animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
 
 @keyframes slide-in-left {
-  0% { opacity: 0; transform: translateX(-20px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.animate-slide-in-left { animation: slide-in-left 0.6s ease-out forwards; }
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+}
 
 /* Vintage paper texture overlay */
 .vintage-paper {
@@ -184,13 +224,25 @@ body {
 }
 
 .vintage-paper::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(139, 90, 43, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(139, 90, 43, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 40% 80%, rgba(139, 90, 43, 0.02) 0%, transparent 50%);
+    radial-gradient(
+      ellipse at 20% 50%,
+      rgba(139, 90, 43, 0.04) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(139, 90, 43, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 40% 80%,
+      rgba(139, 90, 43, 0.02) 0%,
+      transparent 50%
+    );
   pointer-events: none;
   border-radius: inherit;
 }
@@ -199,11 +251,12 @@ body {
 .ornament-border {
   border: 1px solid;
   border-image: linear-gradient(
-    135deg,
-    rgba(194, 120, 48, 0.3) 0%,
-    rgba(194, 120, 48, 0.1) 25%,
-    rgba(194, 120, 48, 0.3) 50%,
-    rgba(194, 120, 48, 0.1) 75%,
-    rgba(194, 120, 48, 0.3) 100%
-  ) 1;
+      135deg,
+      rgba(194, 120, 48, 0.3) 0%,
+      rgba(194, 120, 48, 0.1) 25%,
+      rgba(194, 120, 48, 0.3) 50%,
+      rgba(194, 120, 48, 0.1) 75%,
+      rgba(194, 120, 48, 0.3) 100%
+    )
+    1;
 }

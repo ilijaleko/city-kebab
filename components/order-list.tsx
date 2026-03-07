@@ -58,7 +58,7 @@ function OrderDeleteButton({ orderId }: { orderId: string }) {
       size="icon"
       onClick={handleDelete}
       disabled={isPending}
-      className="h-8 w-8 flex-shrink-0 text-stone-400 dark:text-amber-400/30 hover:text-red-500 hover:bg-red-50/50 dark:hover:bg-red-950/20 cursor-pointer"
+      className="h-8 w-8 flex-shrink-0 text-stone-400 dark:text-stone-600 hover:text-red-500 hover:bg-red-50/50 dark:hover:bg-red-950/20 cursor-pointer"
     >
       <Trash2 className={`h-4 w-4 ${isPending ? "animate-pulse" : ""}`} />
     </Button>
@@ -75,7 +75,7 @@ export function OrderList({
 
   if (orders.length === 0) {
     return (
-      <div className="text-center py-8 text-stone-400 dark:text-amber-400/30">
+      <div className="text-center py-8 text-stone-400 dark:text-stone-500">
         <p className="text-sm">{tGroup("noOrders")}</p>
       </div>
     );
@@ -86,20 +86,22 @@ export function OrderList({
       {orders.map((order, index) => (
         <div
           key={order.id}
-          className="bg-white/50 dark:bg-stone-900/40 rounded-xl border border-orange-300/30 dark:border-amber-700/25 p-3.5 sm:p-4 backdrop-blur-sm"
+          className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-3.5 sm:p-4"
         >
           <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 dark:from-orange-700/50 dark:to-amber-700/50 text-white dark:text-amber-100 flex items-center justify-center text-sm font-bold font-playfair">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-orange-100 to-orange-50 dark:from-stone-800 dark:to-stone-700 text-orange-700 dark:text-stone-200 flex items-center justify-center text-sm font-bold font-playfair">
               {order.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-stone-900 dark:text-amber-50">{order.name}</span>
-                <span className="text-[10px] text-stone-400 dark:text-amber-400/30">
+                <span className="font-medium text-sm text-stone-900 dark:text-stone-50">
+                  {order.name}
+                </span>
+                <span className="text-[10px] text-stone-400 dark:text-stone-500">
                   #{index + 1}
                 </span>
               </div>
-              <div className="text-xs text-stone-500 dark:text-amber-200/50 mt-0.5 space-y-0.5">
+              <div className="text-xs text-stone-500 dark:text-stone-400 mt-0.5 space-y-0.5">
                 <p>
                   {t(`types.${getTypeTranslationKey(order.kebabType)}`)}
                   {order.kebabSize && ` - ${t(`sizes.${order.kebabSize}`)}`}

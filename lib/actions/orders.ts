@@ -90,4 +90,3 @@ export async function updateOrder(data: {
   const group = await db.group.findUnique({ where: { id: order.groupId } });
   if (group) revalidatePath(`/group/${group.code}`);
 }
-

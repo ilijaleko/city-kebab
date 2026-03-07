@@ -15,4 +15,3 @@ export const addOrderSchema = z.object({
   hasCheese: z.boolean().nullable(),
   adds: z.array(z.enum(KEBAB_ADDS)),
 });
-

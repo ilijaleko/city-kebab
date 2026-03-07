@@ -4,9 +4,7 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-const isProtectedRoute = createRouteMatcher([
-  "/(hr|en)/dashboard(.*)",
-]);
+const isProtectedRoute = createRouteMatcher(["/(hr|en)/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {

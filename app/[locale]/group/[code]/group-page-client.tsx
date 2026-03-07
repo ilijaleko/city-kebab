@@ -51,32 +51,25 @@ export function GroupPageClient({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-100 via-orange-50 to-yellow-50 dark:from-amber-950 dark:via-stone-950 dark:to-stone-900">
-      {/* Warm color blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-orange-300/30 dark:bg-orange-900/20 blur-3xl" />
-        <div className="absolute top-1/3 -left-40 w-80 h-80 rounded-full bg-orange-200/25 dark:bg-orange-900/15 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full bg-amber-300/20 dark:bg-amber-800/15 blur-3xl" />
-      </div>
-
-      <div className="relative container mx-auto max-w-md px-4 py-4 sm:py-6">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950">
+      <div className="container mx-auto max-w-md px-4 py-4 sm:py-6">
         <Header showBack backHref={`/${locale}`} />
 
         {/* Group header */}
         <div className="text-center mb-5 sm:mb-6">
-          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-900 dark:text-amber-50">
+          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50">
             {t("title")}
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 dark:text-amber-300/50 mt-1">
+          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
             {t("subtitle")}
           </p>
         </div>
 
         {/* Group code & share */}
-        <div className="bg-white/50 dark:bg-stone-900/50 rounded-xl border border-orange-300/40 dark:border-amber-700/30 p-4 sm:p-5 backdrop-blur-sm mb-5 sm:mb-6">
+        <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-4 sm:p-5 mb-5 sm:mb-6">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] sm:text-xs text-stone-500 dark:text-amber-300/50 uppercase tracking-wider">
+              <p className="text-[10px] sm:text-xs text-stone-500 dark:text-stone-400 uppercase tracking-wider">
                 {t("groupCode")}
               </p>
               <p className="font-playfair text-2xl sm:text-3xl font-bold tracking-widest text-orange-600 dark:text-orange-400">
@@ -93,26 +86,23 @@ export function GroupPageClient({
               {t("copyLink")}
             </Button>
           </div>
-          <p className="text-[10px] sm:text-xs text-stone-400 dark:text-amber-400/30 mt-2">
+          <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 mt-2">
             {t("shareLink")}
           </p>
         </div>
 
         {/* Order Form */}
-        <div className="bg-white/60 dark:bg-stone-900/60 rounded-xl sm:rounded-2xl border border-orange-300/40 dark:border-amber-700/30 p-5 sm:p-6 backdrop-blur-sm mb-5 sm:mb-6">
+        <div className="bg-white dark:bg-stone-900 rounded-xl sm:rounded-2xl border border-stone-200 dark:border-stone-800 p-5 sm:p-6 mb-5 sm:mb-6">
           <OrderForm groupCode={groupCode} userId={userId} />
         </div>
 
         {/* Orders divider */}
-        <div className="relative my-5 sm:my-6">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-orange-300/30 dark:border-amber-700/20" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-gradient-to-b from-orange-50 to-yellow-50 dark:from-stone-950 dark:to-stone-900 px-3 text-stone-500 dark:text-amber-400/40 font-medium">
-              {t("orders")} ({orders.length})
-            </span>
-          </div>
+        <div className="flex items-center gap-3 my-5 sm:my-6">
+          <span className="flex-1 border-t border-stone-200 dark:border-stone-800" />
+          <span className="text-xs uppercase text-stone-500 dark:text-stone-500 font-medium">
+            {t("orders")} ({orders.length})
+          </span>
+          <span className="flex-1 border-t border-stone-200 dark:border-stone-800" />
         </div>
 
         {/* Order List */}
@@ -137,7 +127,7 @@ export function GroupPageClient({
         )}
 
         {/* Footer */}
-        <footer className="border-t border-orange-300/30 dark:border-amber-700/20 mt-8 py-5 text-center">
+        <footer className="border-t border-stone-200 dark:border-stone-800 mt-8 py-5 text-center">
           <div className="flex justify-center">
             <GitHubStar size="sm" showText />
           </div>

@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 export async function getUserOrderHistory(
   userId: string,
   page = 1,
-  perPage = 20
+  perPage = 20,
 ) {
   const orders = await db.order.findMany({
     where: { userId },

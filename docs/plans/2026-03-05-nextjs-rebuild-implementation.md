@@ -15,6 +15,7 @@
 ## Task 1: Clean up old project and scaffold Next.js
 
 **Files:**
+
 - Delete: All files in `src/`, `index.html`, `vite.config.js`, `eslint.config.js`, `jsconfig.json`, `.firebaserc`, `firebase.json`, `.firebase/`
 - Keep: `docs/`, `public/icon-192x192.svg`, `public/icon-512x512.png`, `public/icon-512x512.svg`, `.github/`, `README.md`, `.git/`
 - Create: Fresh Next.js project files
@@ -40,6 +41,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir=fa
 ```
 
 When prompted:
+
 - Would you like to use `src/` directory? **No** (we use `app/` at root)
 - Would you like to use App Router? **Yes**
 - Would you like to use Turbopack? **Yes**
@@ -110,6 +112,7 @@ git commit -m "feat: scaffold Next.js 16+ project, remove old Vite/Firebase app"
 ## Task 2: Configure Tailwind CSS v4 + shadcn/ui
 
 **Files:**
+
 - Modify: `app/globals.css`
 - Create: `components.json`
 - Create: `lib/utils.ts`
@@ -226,6 +229,7 @@ npx shadcn@latest init
 ```
 
 When prompted:
+
 - Style: **New York**
 - Base color: **Gray**
 - CSS variables: **Yes**
@@ -281,6 +285,7 @@ git commit -m "feat: configure Tailwind CSS v4, shadcn/ui with existing theme"
 ## Task 3: Docker + local dev environment
 
 **Files:**
+
 - Create: `Dockerfile`
 - Create: `docker-compose.yml`
 - Create: `.env.example`
@@ -419,6 +424,7 @@ git commit -m "feat: add Docker setup, docker-compose for local dev, env config"
 ## Task 4: Prisma schema + database migration
 
 **Files:**
+
 - Create: `prisma/schema.prisma`
 - Create: `lib/db.ts`
 - Create: `lib/utils/generate-code.ts`
@@ -551,6 +557,7 @@ git commit -m "feat: add Prisma schema with Group, Order, Recipe models"
 ## Task 5: i18n setup with next-intl
 
 **Files:**
+
 - Create: `messages/hr.json`
 - Create: `messages/en.json`
 - Create: `i18n/routing.ts`
@@ -981,6 +988,7 @@ npm run dev
 ```
 
 Visit:
+
 - `http://localhost:3000/hr` - Expected: "City Kebab naruzba"
 - `http://localhost:3000/en` - Expected: "City Kebab Order"
 - `http://localhost:3000/` - Expected: Redirects to `/hr`
@@ -997,6 +1005,7 @@ git commit -m "feat: add next-intl i18n with Croatian and English locales"
 ## Task 6: Theme provider (dark/light mode)
 
 **Files:**
+
 - Create: `components/theme-provider.tsx`
 - Create: `components/theme-toggle.tsx`
 - Modify: `app/[locale]/layout.tsx`
@@ -1132,6 +1141,7 @@ git commit -m "feat: add dark/light/system theme with next-themes"
 ## Task 7: Shared header + language switcher
 
 **Files:**
+
 - Create: `components/language-switcher.tsx`
 - Create: `components/header.tsx`
 
@@ -1252,6 +1262,7 @@ git commit -m "feat: add shared header with language switcher and theme toggle"
 This is the largest task. It ports the existing Home and Group functionality.
 
 **Files:**
+
 - Create: `lib/actions/groups.ts`
 - Create: `lib/actions/orders.ts`
 - Create: `lib/queries/groups.ts`
@@ -1325,7 +1336,12 @@ export function shouldShowCheese(type: string): boolean {
 ```ts
 // lib/validations.ts
 import { z } from "zod";
-import { KEBAB_TYPES, SAUCE_OPTIONS, KEBAB_SIZES, KEBAB_ADDS } from "./kebab-config";
+import {
+  KEBAB_TYPES,
+  SAUCE_OPTIONS,
+  KEBAB_SIZES,
+  KEBAB_ADDS,
+} from "./kebab-config";
 
 export const createGroupSchema = z.object({
   creatorId: z.string().nullable().optional(),
@@ -1421,7 +1437,11 @@ export async function createGroup(locale: string, creatorId?: string | null) {
 "use server";
 
 import { db } from "@/lib/db";
-import { addOrderSchema, deleteOrderSchema, updateOrderSchema } from "@/lib/validations";
+import {
+  addOrderSchema,
+  deleteOrderSchema,
+  updateOrderSchema,
+} from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 
 export async function addOrder(data: {
@@ -1484,7 +1504,7 @@ export async function updateOrder(
     hasCheese: boolean | null;
     adds: string[];
   },
-  userId: string
+  userId: string,
 ) {
   const parsed = updateOrderSchema.parse(data);
 
@@ -1517,6 +1537,7 @@ Build `app/[locale]/page.tsx` - port from the existing `src/components/Home.jsx`
 This is a Client Component (`"use client"`) because it uses `useState` for the join form. Wrap the `createGroup` action call in a form.
 
 The full implementation should match the current Home page layout:
+
 - Card with title + subtitle
 - "Create order" button → calls `createGroup` server action
 - Divider "or"
@@ -1603,6 +1624,7 @@ npm run dev
 ```
 
 Test:
+
 1. Visit `/hr` - Create a group -> redirects to `/hr/group/XXXXXX`
 2. Add an order with all fields
 3. Copy link, open in another tab, add another order
@@ -1622,6 +1644,7 @@ git commit -m "feat: add public Home and Group pages with ordering flow"
 ## Task 9: Clerk authentication
 
 **Files:**
+
 - Modify: `middleware.ts` (add Clerk)
 - Create: `app/[locale]/sign-in/[[...sign-in]]/page.tsx`
 - Create: `app/[locale]/sign-up/[[...sign-up]]/page.tsx`
@@ -1674,9 +1697,7 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-const isProtectedRoute = createRouteMatcher([
-  "/(hr|en)/dashboard(.*)",
-]);
+const isProtectedRoute = createRouteMatcher(["/(hr|en)/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
@@ -1771,6 +1792,7 @@ git commit -m "feat: add Clerk authentication with sign-in/sign-up and protected
 ## Task 10: Protected features on Group page
 
 **Files:**
+
 - Modify: `components/order-list.tsx` (add edit/delete for own orders)
 - Modify: `components/order-form.tsx` (add "save as recipe" for signed-in)
 - Create: `lib/actions/recipes.ts`
@@ -1872,6 +1894,7 @@ git commit -m "feat: add edit/delete orders and save recipes for signed-in users
 ## Task 11: Dashboard - Order history
 
 **Files:**
+
 - Create: `app/[locale]/dashboard/layout.tsx`
 - Create: `app/[locale]/dashboard/page.tsx`
 - Create: `lib/queries/orders.ts`
@@ -1882,7 +1905,11 @@ git commit -m "feat: add edit/delete orders and save recipes for signed-in users
 // lib/queries/orders.ts
 import { db } from "@/lib/db";
 
-export async function getUserOrderHistory(userId: string, page = 1, perPage = 20) {
+export async function getUserOrderHistory(
+  userId: string,
+  page = 1,
+  perPage = 20,
+) {
   const orders = await db.order.findMany({
     where: { userId },
     include: {
@@ -1989,6 +2016,7 @@ git commit -m "feat: add dashboard with order history page"
 ## Task 12: Dashboard - Recipes page
 
 **Files:**
+
 - Create: `app/[locale]/dashboard/recipes/page.tsx`
 - Create: `components/recipe-list.tsx`
 
@@ -2036,11 +2064,13 @@ git commit -m "feat: add dashboard recipes page with CRUD"
 ## Task 13: Dashboard - Settings page
 
 **Files:**
+
 - Create: `app/[locale]/dashboard/settings/page.tsx`
 
 **Step 1: Build settings page**
 
 Simple form with:
+
 - Default name/nickname (stored in localStorage or a UserSettings model - localStorage is simpler and sufficient)
 - Preferred language (links to the language switcher - switches locale)
 
@@ -2049,7 +2079,13 @@ Simple form with:
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -2088,6 +2124,7 @@ git commit -m "feat: add dashboard settings page"
 ## Task 14: GitHub star component (port)
 
 **Files:**
+
 - Create: `components/github-star.tsx`
 - Modify: `app/[locale]/page.tsx` (add to footer)
 - Modify: `components/header.tsx` (add to group page header)
@@ -2112,6 +2149,7 @@ git commit -m "feat: port GitHub star component"
 ## Task 15: Polish and responsive design
 
 **Files:**
+
 - Various component tweaks
 
 **Step 1: Review all pages on mobile**
@@ -2146,6 +2184,7 @@ git commit -m "feat: add loading states, error boundaries, responsive polish"
 ## Task 16: Update README and environment docs
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `.env.example`
 
@@ -2191,6 +2230,7 @@ Expected: No errors.
 **Step 4: Manual smoke test**
 
 Run through the full flow:
+
 1. Create group (anonymous) -> add order -> generate SMS -> copy
 2. Sign in -> create group -> add order -> save recipe
 3. Visit dashboard -> see order history -> see recipes

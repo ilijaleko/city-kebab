@@ -31,7 +31,7 @@ export default function SettingsPage() {
   const storedName = useSyncExternalStore(
     subscribe,
     () => localStorage.getItem(LOCAL_STORAGE_KEY) ?? "",
-    () => ""
+    () => "",
   );
 
   const [defaultName, setDefaultName] = useState(storedName);
@@ -77,18 +77,16 @@ export default function SettingsPage() {
         {navItems.map((item) => (
           <Link key={item.href} href={item.href}>
             <Card
-              className={`transition-colors hover:border-orange-300 cursor-pointer py-4 ${
+              className={`transition-colors hover:border-stone-300 cursor-pointer py-4 ${
                 item.active
-                  ? "border-orange-400 bg-orange-50 dark:bg-orange-950/20"
+                  ? "border-orange-500 bg-orange-50 dark:bg-orange-950/20"
                   : ""
               }`}
             >
               <CardContent className="flex flex-col items-center text-center gap-2 px-3">
                 <item.icon
                   className={`h-5 w-5 ${
-                    item.active
-                      ? "text-orange-500"
-                      : "text-muted-foreground"
+                    item.active ? "text-orange-500" : "text-muted-foreground"
                   }`}
                 />
                 <span
@@ -124,7 +122,7 @@ export default function SettingsPage() {
               />
               <Button
                 onClick={handleSave}
-                className="bg-orange-500 hover:bg-orange-600"
+                className="bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900"
               >
                 {tCommon("save")}
               </Button>
@@ -135,14 +133,15 @@ export default function SettingsPage() {
         {/* Language Preference */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("preferredLanguage")}</CardTitle>
+            <CardTitle className="text-base">
+              {t("preferredLanguage")}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <LanguageSwitcher />
           </CardContent>
         </Card>
       </div>
-
     </div>
   );
 }

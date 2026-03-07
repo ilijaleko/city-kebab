@@ -30,4 +30,3 @@ export async function checkAndJoinGroup(code: string, locale: string) {
   }
   redirect(`/${locale}/group/${code.toUpperCase().trim()}`);
 }
-

@@ -21,7 +21,7 @@ export function GitHubStar({
     const fetchStarCount = async () => {
       try {
         const response = await fetch(
-          "https://api.github.com/repos/ilijaleko/city-kebab"
+          "https://api.github.com/repos/ilijaleko/city-kebab",
         );
         if (response.ok) {
           const data = await response.json();
@@ -61,9 +61,9 @@ export function GitHubStar({
       rel="noopener noreferrer"
       className={`
         inline-flex items-center gap-2 font-medium rounded-md
-        bg-transparent hover:bg-orange-50 dark:hover:bg-orange-900/20
-        text-orange-600 dark:text-orange-400
-        border border-orange-300 dark:border-orange-600 hover:border-orange-400 dark:hover:border-orange-500
+        bg-transparent hover:bg-stone-100 dark:hover:bg-stone-800
+        text-stone-600 dark:text-stone-300
+        border border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600
         shadow-sm hover:shadow-md
         transition-all duration-200 ease-in-out
         hover:scale-105 active:scale-95
@@ -71,13 +71,15 @@ export function GitHubStar({
       `}
     >
       <div className="flex items-center gap-1.5">
-        <Github className={`${iconSizes[size]} text-orange-600 dark:text-orange-400`} />
-        <Star className={`${iconSizes[size]} text-orange-500`} />
+        <Github
+          className={`${iconSizes[size]} text-stone-600 dark:text-stone-300`}
+        />
+        <Star className={`${iconSizes[size]} text-yellow-500`} />
       </div>
       {showText && (
         <span className="whitespace-nowrap">
           {isLoading ? (
-            <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-stone-400 border-t-transparent rounded-full animate-spin" />
           ) : (
             <>
               {formatStarCount(starCount)}

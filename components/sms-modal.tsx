@@ -68,14 +68,14 @@ export function SmsModal({ orders, open, onClose }: SmsModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="w-full max-w-md mx-4 bg-white/95 dark:bg-stone-900/95 rounded-2xl border border-orange-300/40 dark:border-amber-700/30 shadow-2xl max-h-[80vh] flex flex-col overflow-hidden">
-        <div className="flex-shrink-0 p-5 sm:p-6 border-b border-orange-200/40 dark:border-amber-800/20">
+      <div className="w-full max-w-md mx-4 bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xl max-h-[80vh] flex flex-col overflow-hidden">
+        <div className="flex-shrink-0 p-5 sm:p-6 border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-playfair text-lg font-bold text-stone-900 dark:text-amber-50">
+              <h2 className="font-playfair text-lg font-bold text-stone-900 dark:text-stone-50">
                 {t("smsTitle")}
               </h2>
-              <p className="text-xs text-stone-500 dark:text-amber-300/50 mt-0.5">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
                 {t("smsSubtitle")}
               </p>
             </div>
@@ -83,20 +83,20 @@ export function SmsModal({ orders, open, onClose }: SmsModalProps) {
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="cursor-pointer h-8 w-8 text-stone-400 dark:text-amber-400/40"
+              className="cursor-pointer h-8 w-8 text-stone-400 dark:text-stone-500"
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
-          <pre className="whitespace-pre-wrap text-sm bg-amber-50/50 dark:bg-stone-800/50 text-stone-700 dark:text-amber-100/80 p-4 rounded-xl font-mono border border-orange-200/30 dark:border-amber-700/20">
+          <pre className="whitespace-pre-wrap text-sm bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 p-4 rounded-xl font-mono border border-stone-200 dark:border-stone-800">
             {smsText}
           </pre>
           <div className="flex gap-2">
             <Button
               onClick={handleCopy}
-              className="flex-1 bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white cursor-pointer rounded-xl"
+              className="flex-1 bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900 text-white cursor-pointer rounded-xl shadow-sm"
             >
               <Copy className="h-4 w-4 mr-2" />
               {t("copySms")}

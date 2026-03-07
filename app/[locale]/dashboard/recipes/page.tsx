@@ -1,10 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getUserRecipes } from "@/lib/queries/recipes";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { ClipboardList, BookOpen, Settings } from "lucide-react";
 import { RecipeList } from "@/components/recipe-list";
@@ -53,18 +50,16 @@ export default async function RecipesPage() {
         {navItems.map((item) => (
           <Link key={item.href} href={item.href}>
             <Card
-              className={`transition-colors hover:border-orange-300 cursor-pointer py-4 ${
+              className={`transition-colors hover:border-stone-300 cursor-pointer py-4 ${
                 item.active
-                  ? "border-orange-400 bg-orange-50 dark:bg-orange-950/20"
+                  ? "border-orange-500 bg-orange-50 dark:bg-orange-950/20"
                   : ""
               }`}
             >
               <CardContent className="flex flex-col items-center text-center gap-2 px-3">
                 <item.icon
                   className={`h-5 w-5 ${
-                    item.active
-                      ? "text-orange-500"
-                      : "text-muted-foreground"
+                    item.active ? "text-orange-500" : "text-muted-foreground"
                   }`}
                 />
                 <span

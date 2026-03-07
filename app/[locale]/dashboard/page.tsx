@@ -55,18 +55,16 @@ export default async function DashboardPage() {
         {navItems.map((item) => (
           <Link key={item.href} href={item.href}>
             <Card
-              className={`transition-colors hover:border-orange-300 cursor-pointer py-4 ${
+              className={`transition-colors hover:border-stone-300 cursor-pointer py-4 ${
                 item.active
-                  ? "border-orange-400 bg-orange-50 dark:bg-orange-950/20"
+                  ? "border-orange-500 bg-orange-50 dark:bg-orange-950/20"
                   : ""
               }`}
             >
               <CardContent className="flex flex-col items-center text-center gap-2 px-3">
                 <item.icon
                   className={`h-5 w-5 ${
-                    item.active
-                      ? "text-orange-500"
-                      : "text-muted-foreground"
+                    item.active ? "text-orange-500" : "text-muted-foreground"
                   }`}
                 />
                 <span
@@ -100,7 +98,7 @@ export default async function DashboardPage() {
                 <CardHeader className="pb-0">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base">{order.name}</CardTitle>
-                    <span className="inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-2.5 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
+                    <span className="inline-flex items-center rounded-full bg-orange-50 dark:bg-orange-950/30 px-2.5 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
                       {order.group.code}
                     </span>
                   </div>
