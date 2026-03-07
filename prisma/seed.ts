@@ -1,5 +1,5 @@
-import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 import { PrismaClient } from "../lib/generated/prisma/client";
 
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
@@ -17,14 +17,11 @@ const defaultPrices = [
 ];
 
 async function main() {
-  for (const item of defaultPrices) {
-    await prisma.priceItem.upsert({
-      where: { itemKey: item.itemKey },
-      update: { price: item.price },
-      create: item,
-    });
-  }
-  console.log("Seeded default prices");
+  const result = await prisma.priceItem.createMany({
+    data: defaultPrices,
+    skipDuplicates: true,
+  });
+  console.log(`Seeded ${result.count} new price items`);
 }
 
 main()
@@ -36,3 +33,4 @@ main()
     await prisma.$disconnect();
     await pool.end();
   });
+
