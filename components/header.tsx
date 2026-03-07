@@ -3,8 +3,16 @@
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { SignInButton, useAuth } from "@clerk/nextjs";
-import { ArrowLeft, UserCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SignInButton, useAuth, useClerk, useUser } from "@clerk/nextjs";
+import { ArrowLeft, ChevronDown, LogOut, UserCircle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,7 +26,9 @@ export function Header({ showBack = false, backHref }: HeaderProps) {
   const t = useTranslations("common");
   const router = useRouter();
   const locale = useLocale();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   const handleBack = () => {
     if (backHref) {
@@ -44,18 +54,55 @@ export function Header({ showBack = false, backHref }: HeaderProps) {
         )}
       </div>
       <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
-        {isSignedIn ? (
-          <Button
-            variant="outline"
-            size="sm"
-            asChild
-            className="cursor-pointer text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
-          >
-            <Link href={`/${locale}/dashboard`}>
-              <UserCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" />
-              {t("dashboard")}
-            </Link>
-          </Button>
+        <LanguageSwitcher />
+        <ThemeToggle />
+        {!isLoaded ? (
+          <div className="w-[70px] sm:w-[85px] h-8 sm:h-9 rounded-lg bg-stone-100 dark:bg-stone-800 animate-pulse" />
+        ) : isSignedIn ? (
+          <div className="flex items-center">
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="cursor-pointer text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9 rounded-r-none border-r-0"
+            >
+              <Link href={`/${locale}/dashboard`}>
+                <UserCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" />
+                {t("dashboard")}
+              </Link>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="cursor-pointer h-8 sm:h-9 px-1.5 rounded-l-none"
+                >
+                  <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <p className="text-sm font-medium truncate">
+                    {user?.fullName || user?.emailAddresses[0]?.emailAddress}
+                  </p>
+                  {user?.fullName && user?.emailAddresses[0]?.emailAddress && (
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
+                      {user.emailAddresses[0].emailAddress}
+                    </p>
+                  )}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => signOut({ redirectUrl: `/${locale}` })}
+                  className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                >
+                  <LogOut className="h-3.5 w-3.5 mr-2" />
+                  {t("signOut")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : (
           <SignInButton mode="modal">
             <Button
@@ -67,8 +114,6 @@ export function Header({ showBack = false, backHref }: HeaderProps) {
             </Button>
           </SignInButton>
         )}
-        <LanguageSwitcher />
-        <ThemeToggle />
       </div>
     </div>
   );

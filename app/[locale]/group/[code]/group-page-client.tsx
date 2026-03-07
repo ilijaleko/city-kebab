@@ -6,8 +6,17 @@ import { OrderForm } from "@/components/order-form";
 import { OrderList } from "@/components/order-list";
 import { SmsModal } from "@/components/sms-modal";
 import { Button } from "@/components/ui/button";
+import { MENU_CATEGORIES } from "@/lib/menu";
 import type { PriceMap } from "@/lib/prices";
-import { Copy, MessageSquare } from "lucide-react";
+import { STATUS_DOT, useShopStatus } from "@/lib/shop-status";
+import {
+  ChevronRight,
+  Copy,
+  MapPin,
+  Clock,
+  MessageSquare,
+  Quote,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -57,8 +66,13 @@ export function GroupPageClient({
   prices = {},
 }: GroupPageClientProps) {
   const t = useTranslations("group");
+  const tHome = useTranslations("home");
+  const tKebab = useTranslations("kebab");
   const tCommon = useTranslations("common");
   const [smsOpen, setSmsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const status = useShopStatus();
+  const hasPrices = Object.keys(prices).length > 0;
 
   const groupTotal = orders.reduce((sum, o) => sum + (o.price ?? 0), 0);
 
@@ -111,6 +125,133 @@ export function GroupPageClient({
           <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 mt-2">
             {t("shareLink")}
           </p>
+        </div>
+
+        {/* Shop info strip */}
+        <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-stone-400 dark:text-stone-500 mb-3 sm:mb-4">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              {status !== "closed" && (
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${STATUS_DOT[status]}`}
+                />
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${STATUS_DOT[status]}`}
+              />
+            </span>
+            <span
+              className={`text-[10px] sm:text-xs ${status === "open" ? "text-green-700 dark:text-green-400" : status === "closing" ? "text-yellow-700 dark:text-yellow-400" : "text-stone-500 dark:text-stone-500"}`}
+            >
+              {status === "open"
+                ? tHome("openNow")
+                : status === "closing"
+                  ? tHome("closingSoon")
+                  : tHome("closedNow")}
+            </span>
+          </span>
+          <span className="text-[10px] sm:text-xs">&#183;</span>
+          <span className="inline-flex items-center gap-1">
+            <MapPin className="h-3 w-3" />
+            <span className="text-[10px] sm:text-xs">{tHome("location")}</span>
+          </span>
+          <span className="text-[10px] sm:text-xs">&#183;</span>
+          <span className="inline-flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            <span className="text-[10px] sm:text-xs">{tHome("hours")}</span>
+          </span>
+        </div>
+
+        {/* About City Kebab expandable */}
+        <div className="mb-5 sm:mb-6">
+          <button
+            onClick={() => setAboutOpen(!aboutOpen)}
+            className="flex items-center gap-1.5 mx-auto text-[10px] sm:text-xs uppercase tracking-wider text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 transition-colors cursor-pointer"
+          >
+            <ChevronRight
+              className={`h-3 w-3 transition-transform duration-200 ${aboutOpen ? "rotate-90" : ""}`}
+            />
+            {t("aboutShop")}
+          </button>
+
+          {aboutOpen && (
+            <div className="mt-3 bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-4 sm:p-5 animate-fade-in">
+              {/* Menu / Prices */}
+              {hasPrices && (
+                <div className="space-y-4 sm:space-y-5">
+                  {MENU_CATEGORIES.map((category) => {
+                    const visibleItems = category.items.filter(
+                      (item) => prices[item.priceKey] != null,
+                    );
+                    if (visibleItems.length === 0) return null;
+                    return (
+                      <div key={category.labelKey}>
+                        <h3 className="font-playfair text-sm font-bold text-stone-900 dark:text-stone-50 mb-2">
+                          {tKebab(category.labelKey)}
+                        </h3>
+                        <div className="space-y-1.5">
+                          {visibleItems.map((item) => (
+                            <div
+                              key={item.priceKey}
+                              className="flex items-baseline gap-2"
+                            >
+                              <span className="text-sm text-stone-700 dark:text-stone-300">
+                                {item.sizeKey
+                                  ? tKebab(item.sizeKey)
+                                  : tKebab(item.labelKey)}
+                              </span>
+                              <span className="flex-1 border-b border-dotted border-stone-300 dark:border-stone-700 translate-y-[-3px]" />
+                              <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                                {prices[item.priceKey]!.toFixed(2)} &euro;
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 text-center italic">
+                    {t("menuNote")}
+                  </p>
+                </div>
+              )}
+
+              {/* Reviews */}
+              <div
+                className={
+                  hasPrices
+                    ? "mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-stone-200 dark:border-stone-800"
+                    : ""
+                }
+              >
+                <div className="space-y-3">
+                  {([1, 2] as const).map((num) => (
+                    <div key={num}>
+                      <Quote className="h-3.5 w-3.5 text-stone-200 dark:text-stone-700 mb-1" />
+                      <p className="font-playfair italic text-stone-800 dark:text-stone-300 text-sm leading-relaxed">
+                        {tHome(`review${num}Text`)}
+                      </p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-100 to-orange-50 dark:from-stone-800 dark:to-stone-700 flex items-center justify-center flex-shrink-0">
+                          <span className="font-playfair text-[10px] font-bold text-white dark:text-stone-200">
+                            {tHome(`review${num}Author`).charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-stone-900 dark:text-stone-50">
+                            {tHome(`review${num}Author`)}
+                          </p>
+                          <p className="text-[10px] text-stone-500 dark:text-stone-400">
+                            {tHome(`review${num}Role`)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Order Form */}

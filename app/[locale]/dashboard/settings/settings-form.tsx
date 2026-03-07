@@ -2,26 +2,19 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { useClerk } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { LogOut } from "lucide-react";
 import { saveDefaultName } from "@/lib/actions/profile";
 
 type SettingsFormProps = {
   defaultName: string;
-  locale: string;
 };
 
-export function SettingsForm({
-  defaultName: initialName,
-  locale,
-}: SettingsFormProps) {
+export function SettingsForm({ defaultName: initialName }: SettingsFormProps) {
   const t = useTranslations("dashboard");
   const tCommon = useTranslations("common");
-  const { signOut } = useClerk();
   const [defaultName, setDefaultName] = useState(initialName);
   const [isPending, startTransition] = useTransition();
 
@@ -76,17 +69,6 @@ export function SettingsForm({
           </p>
           <LanguageSwitcher />
         </div>
-      </div>
-
-      {/* Sign Out */}
-      <div className="pt-2">
-        <button
-          onClick={() => signOut({ redirectUrl: `/${locale}` })}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
-        >
-          <LogOut className="h-4 w-4" />
-          {tCommon("signOut")}
-        </button>
       </div>
     </>
   );

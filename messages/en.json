@@ -108,7 +108,9 @@
     "tryAgain": "Try again",
     "orderDeleted": "Order deleted!",
     "deleteError": "Failed to delete order",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "aboutShop": "See menu",
+    "menuNote": "Sauces and toppings included in price."
   },
   "kebab": {
     "name": "Name or nickname",

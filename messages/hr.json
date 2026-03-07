@@ -108,7 +108,9 @@
     "tryAgain": "Pokušajte ponovo",
     "orderDeleted": "Narudžba obrisana!",
     "deleteError": "Brisanje narudžbe nije uspjelo",
-    "deleting": "Brisanje..."
+    "deleting": "Brisanje...",
+    "aboutShop": "Pogledaj cjenik",
+    "menuNote": "Umaci i dodaci uključeni u cijenu."
   },
   "kebab": {
     "name": "Ime ili nadimak",

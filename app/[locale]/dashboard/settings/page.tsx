@@ -1,14 +1,18 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations, getLocale } from "next-intl/server";
+import { isAdmin } from "@/lib/auth";
 import { getUserDefaultName } from "@/lib/queries/profile";
 import Link from "next/link";
-import { ClipboardList, BookOpen, Settings } from "lucide-react";
+import { ClipboardList, BookOpen, Settings, Shield } from "lucide-react";
 import { SettingsForm } from "./settings-form";
 
 export default async function SettingsPage() {
-  const { userId } = await auth();
-  const t = await getTranslations("dashboard");
-  const locale = await getLocale();
+  const [{ userId }, t, locale, admin] = await Promise.all([
+    auth(),
+    getTranslations("dashboard"),
+    getLocale(),
+    isAdmin(),
+  ]);
 
   const defaultName = await getUserDefaultName(userId!);
 
@@ -61,7 +65,18 @@ export default async function SettingsPage() {
       </div>
 
       {/* Settings */}
-      <SettingsForm defaultName={defaultName} locale={locale} />
+      <SettingsForm defaultName={defaultName} />
+
+      {/* Admin link */}
+      {admin && (
+        <Link
+          href={`/${locale}/dashboard/admin`}
+          className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+        >
+          <Shield className="h-4 w-4" />
+          Admin
+        </Link>
+      )}
     </div>
   );
 }
