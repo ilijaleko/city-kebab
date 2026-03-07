@@ -26,8 +26,21 @@ model Order {
   sauce     String
   hasCheese Boolean?
   adds      String[]
+  price     Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PriceItem {
+  id      String @id @default(cuid())
+  itemKey String @unique
+  price   Float
+}
+
+model UserProfile {
+  id          String @id @default(cuid())
+  userId      String @unique
+  defaultName String @default("")
 }
 
 model Recipe {

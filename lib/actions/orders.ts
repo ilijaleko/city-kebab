@@ -2,6 +2,8 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { calculateOrderPrice } from "@/lib/prices";
+import { getPriceMap } from "@/lib/queries/prices";
 import { addOrderSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 
@@ -25,6 +27,13 @@ export async function addOrder(data: {
     throw new Error("Group not found");
   }
 
+  const prices = await getPriceMap();
+  const price = calculateOrderPrice(prices, {
+    kebabType: parsed.kebabType,
+    kebabSize: parsed.kebabSize,
+    hasCheese: parsed.hasCheese,
+  });
+
   await db.order.create({
     data: {
       groupId: group.id,
@@ -35,10 +44,11 @@ export async function addOrder(data: {
       sauce: parsed.sauce,
       hasCheese: parsed.hasCheese,
       adds: parsed.adds,
+      price,
     },
   });
 
-  revalidatePath(`/group/${parsed.groupCode}`);
+  revalidatePath(`/[locale]/group/${parsed.groupCode}`, "page");
 }
 
 export async function deleteOrder(orderId: string) {
@@ -56,7 +66,7 @@ export async function deleteOrder(orderId: string) {
   }
 
   await db.order.delete({ where: { id: orderId } });
-  if (group) revalidatePath(`/group/${group.code}`);
+  if (group) revalidatePath(`/[locale]/group/${group.code}`, "page");
 }
 
 export async function updateOrder(data: {
@@ -88,5 +98,5 @@ export async function updateOrder(data: {
   });
 
   const group = await db.group.findUnique({ where: { id: order.groupId } });
-  if (group) revalidatePath(`/group/${group.code}`);
+  if (group) revalidatePath(`/[locale]/group/${group.code}`, "page");
 }

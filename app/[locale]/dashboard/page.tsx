@@ -1,15 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getUserOrderHistory } from "@/lib/queries/orders";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import Link from "next/link";
 import { ClipboardList, BookOpen, Settings } from "lucide-react";
+import { ADDONS_EMOJIS } from "@/lib/kebab-config";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -23,125 +17,115 @@ export default async function DashboardPage() {
     {
       href: `/${locale}/dashboard`,
       label: t("history"),
-      description: t("historyDesc"),
       icon: ClipboardList,
       active: true,
     },
     {
       href: `/${locale}/dashboard/recipes`,
       label: t("recipes"),
-      description: t("recipesDesc"),
       icon: BookOpen,
       active: false,
     },
     {
       href: `/${locale}/dashboard/settings`,
       label: t("settings"),
-      description: t("settingsDesc"),
       icon: Settings,
       active: false,
     },
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Page Title */}
-      <div>
-        <h1 className="text-2xl font-bold text-orange-600">{t("title")}</h1>
+    <div className="space-y-6 sm:space-y-8">
+      {/* Title */}
+      <div className="text-center">
+        <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-50">
+          {t("title")}
+        </h1>
       </div>
 
-      {/* Navigation Cards */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Navigation */}
+      <div className="flex flex-wrap justify-center gap-2">
         {navItems.map((item) => (
-          <Link key={item.href} href={item.href}>
-            <Card
-              className={`transition-colors hover:border-stone-300 cursor-pointer py-4 ${
-                item.active
-                  ? "border-orange-500 bg-orange-50 dark:bg-orange-950/20"
-                  : ""
-              }`}
-            >
-              <CardContent className="flex flex-col items-center text-center gap-2 px-3">
-                <item.icon
-                  className={`h-5 w-5 ${
-                    item.active ? "text-orange-500" : "text-muted-foreground"
-                  }`}
-                />
-                <span
-                  className={`text-sm font-medium ${
-                    item.active ? "text-orange-600" : ""
-                  }`}
-                >
-                  {item.label}
-                </span>
-              </CardContent>
-            </Card>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+              item.active
+                ? "bg-stone-900 text-white dark:bg-stone-50 dark:text-stone-900"
+                : "bg-white dark:bg-stone-900 text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-800 hover:bg-stone-50 dark:hover:bg-stone-800"
+            }`}
+          >
+            <item.icon className="h-3.5 w-3.5" />
+            {item.label}
           </Link>
         ))}
       </div>
 
-      {/* Order History Section */}
+      {/* Order History */}
       <div>
-        <h2 className="text-lg font-semibold mb-3">{t("history")}</h2>
+        <h2 className="font-playfair text-lg sm:text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3 sm:mb-4">
+          {t("history")}
+        </h2>
 
         {orders.length === 0 ? (
-          <Card>
-            <CardContent className="py-8 text-center text-muted-foreground">
-              <ClipboardList className="h-10 w-10 mx-auto mb-3 opacity-40" />
-              <p>{t("noHistory")}</p>
-            </CardContent>
-          </Card>
+          <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 py-12 text-center">
+            <ClipboardList className="h-10 w-10 mx-auto mb-3 text-stone-300 dark:text-stone-600" />
+            <p className="text-sm text-stone-400 dark:text-stone-500">
+              {t("noHistory")}
+            </p>
+          </div>
         ) : (
           <div className="space-y-3">
             {orders.map((order) => (
-              <Card key={order.id}>
-                <CardHeader className="pb-0">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{order.name}</CardTitle>
-                    <span className="inline-flex items-center rounded-full bg-orange-50 dark:bg-orange-950/30 px-2.5 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
-                      {order.group.code}
+              <div
+                key={order.id}
+                className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-4 sm:p-5 overflow-hidden"
+              >
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="font-medium text-sm text-stone-900 dark:text-stone-50 truncate">
+                    {order.name}
+                  </span>
+                  <span className="text-[10px] font-mono tracking-wider text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-full shrink-0">
+                    {order.group.code}
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 mb-3">
+                  {new Date(order.createdAt).toLocaleDateString(locale, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <div className="flex flex-wrap gap-1.5 text-xs text-stone-600 dark:text-stone-400">
+                  <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                    {tKebab(`types.${order.kebabType}`)}
+                  </span>
+                  {order.kebabSize && (
+                    <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                      {tKebab(`sizes.${order.kebabSize}`)}
                     </span>
-                  </div>
-                  <CardDescription>
-                    {new Date(order.createdAt).toLocaleDateString(locale, {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 text-sm">
-                    <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                      {tKebab(`types.${order.kebabType}`)}
+                  )}
+                  <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                    {tKebab(`sauces.${order.sauce}`)}
+                  </span>
+                  {order.hasCheese && (
+                    <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                      {tKebab("cheese")}
                     </span>
-                    {order.kebabSize && (
-                      <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                        {tKebab(`sizes.${order.kebabSize}`)}
+                  )}
+                  {order.adds.length > 0 &&
+                    order.adds.map((addon) => (
+                      <span
+                        key={addon}
+                        className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md"
+                      >
+                        {ADDONS_EMOJIS[addon] || ""} {tKebab(`adds.${addon}`)}
                       </span>
-                    )}
-                    <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                      {tKebab(`sauces.${order.sauce}`)}
-                    </span>
-                    {order.hasCheese && (
-                      <span className="inline-flex items-center rounded-md bg-yellow-100 dark:bg-yellow-900/30 px-2 py-1 text-xs text-yellow-700 dark:text-yellow-300">
-                        {tKebab("cheese")} {tKebab("cheeseYes")}
-                      </span>
-                    )}
-                    {order.adds.length > 0 &&
-                      order.adds.map((addon) => (
-                        <span
-                          key={addon}
-                          className="inline-flex items-center rounded-md bg-green-100 dark:bg-green-900/30 px-2 py-1 text-xs text-green-700 dark:text-green-300"
-                        >
-                          {tKebab(`adds.${addon}`)}
-                        </span>
-                      ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    ))}
+                </div>
+              </div>
             ))}
           </div>
         )}

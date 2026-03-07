@@ -11,7 +11,9 @@
     "back": "Natrag",
     "home": "Početna",
     "signIn": "Prijavi se",
-    "signUp": "Registriraj se"
+    "signUp": "Registriraj se",
+    "signOut": "Odjavi se",
+    "dashboard": "Profil"
   },
   "home": {
     "location": "Bjelovar, Hrvatska",
@@ -29,7 +31,7 @@
     "orJoinGroup": "ili se pridruži grupi",
     "storyLabel": "Naša priča",
     "storyTitle": "Kebab koji se pamti.",
-    "storyText": "2015. godine jedna je mala obitelj otvorila svoja vrata na ulicama Bjelovara s jednim jednostavnim snom: služiti najbolji kebab u gradu. Bez prečaca, bez kompromisa. Svježe meso sa ražnja svaki dan, domaći umaci prema receptima koji se prenose generacijama i pecivo koje savršeno hrska pod prstima. Ono što je počelo kao skromna radnja brzo je postalo okupljalište — gdje se prijatelji sreću, obitelji slave, a nepoznati postaju stalni gosti. City Kebab nije samo hrana. To je dio bjelovarskog srca.",
+    "storyText": "2015. godine jedna je mala obitelj otvorila svoja vrata na ulicama Bjelovara s jednim jednostavnim snom: služiti najbolji kebab u gradu. Bez prečaca, bez kompromisa. Svježe meso sa ražnja svaki dan, domaći umaci prema receptima koji se prenose generacijama i lepinja koje savršeno hrska pod prstima. Ono što je počelo kao skromna radnja brzo je postalo okupljalište — gdje se prijatelji sreću, obitelji slave, a nepoznati postaju stalni gosti. City Kebab nije samo hrana. To je dio bjelovarskog srca.",
     "storyText2": "Danas City Kebab stoji kao omiljeno mjesto u gradu. Ista strast, isti recepti, ista toplina koja je dočekala prvog gosta i dalje živi u svakoj narudžbi koju pripremamo.",
     "qualityFreshIcon": "fire",
     "qualityFresh": "Svježe meso svaki dan",
@@ -38,14 +40,14 @@
     "qualitySauce": "Obiteljski recepti",
     "qualitySauceDesc": "Umaci koji se prenose generacijama",
     "qualityBreadIcon": "wheat",
-    "qualityBread": "Domaće pecivo",
+    "qualityBread": "Domaće lepinja",
     "qualityBreadDesc": "Svježe pečeno, hrskavo izvana",
     "qualityLoveIcon": "heart",
     "qualityLove": "S ljubavlju",
     "qualityLoveDesc": "Svaki kebab ručno pripremljen s pažnjom",
     "reviewsTitle": "Što ljudi kažu",
     "reviewsSubtitle": "Glasovi naše voljene zajednice",
-    "review1Text": "Dolazim ovdje otkad su otvorili. Kebab je uvijek savršen — hrskavo pecivo, svježe meso, umak je nevjerojatan. Ovo je MJESTO u Bjelovaru.",
+    "review1Text": "Dolazim ovdje otkad su otvorili. Kebab je uvijek savršen — hrskavo lepinja, svježe meso, umak je nevjerojatan. Ovo je MJESTO u Bjelovaru.",
     "review1Author": "Marko T.",
     "review1Role": "Stalni gost od 2015.",
     "review2Text": "Cijeli moj ured naručuje iz City Kebaba svakog petka. To nam je sad tradicija. Grupno naručivanje sve olakšava, a hrana nikad ne razočarava.",
@@ -57,6 +59,9 @@
     "review4Text": "I vegetarijanska opcija je fantastična! Toliko pažnje ulažu u sve. Osjetiš ljubav u svakom zalogaju. Najbolji fast food u županiji.",
     "review4Author": "Petra S.",
     "review4Role": "Sretna mušterija",
+    "menuSubtitle": "Što nudimo",
+    "menuTitle": "Naš cjenik",
+    "menuNote": "Umaci i dodaci (luk, rajčica, salata, kupus, kukuruz, krastavci) uključeni u cijenu.",
     "howItWorks": "Kako naručiti s ekipom?",
     "step1Icon": "users",
     "step1Title": "Skupi ekipu",
@@ -117,10 +122,17 @@
     "cheese": "Sir",
     "cheeseYes": "Da",
     "cheeseNo": "Ne",
+    "menu": {
+      "mali": "Mali",
+      "veliki": "Veliki",
+      "other": "Ostalo",
+      "extras": "Dodaci",
+      "extraMeso": "Meso kebab (100g)"
+    },
     "addons": "Dodaci (neobavezno):",
     "addonsAll": "Sve",
     "types": {
-      "pecivo": "Pecivo",
+      "lepinja": "Lepinja",
       "tortilja": "Tortilja",
       "vegetarijanski": "Vegetarijanski",
       "tortilja_mix_salata": "Tortilja mix salata"
@@ -168,7 +180,7 @@
     "chooseRecipe": "Odaberite svoj omiljeni recept"
   },
   "dashboard": {
-    "title": "Upravljačka ploča",
+    "title": "Moj profil",
     "history": "Povijest narudžbi",
     "historyDesc": "Pregled svih vaših prošlih narudžbi",
     "recipes": "Moji recepti",

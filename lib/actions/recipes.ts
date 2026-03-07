@@ -16,20 +16,38 @@ export async function saveRecipe(data: {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
-  await db.recipe.create({
-    data: {
-      userId,
-      name: data.name,
-      userName: data.userName ?? null,
-      kebabType: data.kebabType,
-      kebabSize: data.kebabSize,
-      sauce: data.sauce,
-      hasCheese: data.hasCheese,
-      adds: data.adds,
-    },
+  const existing = await db.recipe.findFirst({
+    where: { userId, name: data.name },
   });
 
-  revalidatePath("/dashboard/recipes");
+  if (existing) {
+    await db.recipe.update({
+      where: { id: existing.id },
+      data: {
+        userName: data.userName ?? null,
+        kebabType: data.kebabType,
+        kebabSize: data.kebabSize,
+        sauce: data.sauce,
+        hasCheese: data.hasCheese,
+        adds: data.adds,
+      },
+    });
+  } else {
+    await db.recipe.create({
+      data: {
+        userId,
+        name: data.name,
+        userName: data.userName ?? null,
+        kebabType: data.kebabType,
+        kebabSize: data.kebabSize,
+        sauce: data.sauce,
+        hasCheese: data.hasCheese,
+        adds: data.adds,
+      },
+    });
+  }
+
+  revalidatePath("/[locale]/dashboard/recipes", "page");
 }
 
 export async function deleteRecipe(recipeId: string) {
@@ -40,5 +58,5 @@ export async function deleteRecipe(recipeId: string) {
   if (!recipe || recipe.userId !== userId) throw new Error("Unauthorized");
 
   await db.recipe.delete({ where: { id: recipeId } });
-  revalidatePath("/dashboard/recipes");
+  revalidatePath("/[locale]/dashboard/recipes", "page");
 }

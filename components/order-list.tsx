@@ -1,12 +1,12 @@
 "use client";
 
-import { useTransition } from "react";
-import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ADDONS_EMOJIS } from "@/lib/kebab-config";
 import { deleteOrder } from "@/lib/actions/orders";
+import { ADDONS_EMOJIS } from "@/lib/kebab-config";
+import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 type Order = {
   id: string;
@@ -17,6 +17,7 @@ type Order = {
   hasCheese: boolean | null;
   adds: string[];
   userId: string | null;
+  price: number | null;
 };
 
 type OrderListProps = {
@@ -24,18 +25,6 @@ type OrderListProps = {
   currentUserId?: string | null;
   isGroupCreator?: boolean;
 };
-
-function getTypeTranslationKey(type: string): string {
-  return type.replace(/ /g, "_");
-}
-
-function getSauceTranslationKey(s: string): string {
-  return s
-    .replace(/ /g, "_")
-    .replace(/\(/g, "")
-    .replace(/\)/g, "")
-    .replace("malo_manje", "manje");
-}
 
 function OrderDeleteButton({ orderId }: { orderId: string }) {
   const [isPending, startTransition] = useTransition();
@@ -100,24 +89,28 @@ export function OrderList({
                 <span className="text-[10px] text-stone-400 dark:text-stone-500">
                   #{index + 1}
                 </span>
+                {order.price != null && (
+                  <span className="ml-auto text-xs font-medium text-orange-600 dark:text-orange-400">
+                    {order.price.toFixed(2)} &euro;
+                  </span>
+                )}
               </div>
               <div className="text-xs text-stone-500 dark:text-stone-400 mt-0.5 space-y-0.5">
                 <p>
-                  {t(`types.${getTypeTranslationKey(order.kebabType)}`)}
+                  {t(`types.${order.kebabType}`)}
                   {order.kebabSize && ` - ${t(`sizes.${order.kebabSize}`)}`}
                   {order.hasCheese !== null &&
                     ` - ${t("cheese")}: ${order.hasCheese ? t("cheeseYes") : t("cheeseNo")}`}
                 </p>
                 <p>
-                  {t("sauce")}:{" "}
-                  {t(`sauces.${getSauceTranslationKey(order.sauce)}`)}
+                  {t("sauce")}: {t(`sauces.${order.sauce}`)}
                 </p>
                 {order.adds.length > 0 && (
                   <p>
                     {order.adds
                       .map(
                         (addon) =>
-                          `${ADDONS_EMOJIS[addon] || ""} ${t(`adds.${addon.replace(/ /g, "_")}`)}`,
+                          `${ADDONS_EMOJIS[addon] || ""} ${t(`adds.${addon}`)}`,
                       )
                       .join(", ")}
                   </p>

@@ -1,4 +1,6 @@
 import { getGroupByCode } from "@/lib/queries/groups";
+import { getPriceMap } from "@/lib/queries/prices";
+import { getUserDefaultName } from "@/lib/queries/profile";
 import { getUserRecipes } from "@/lib/queries/recipes";
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
@@ -10,10 +12,13 @@ type Props = {
 
 export default async function GroupPage({ params }: Props) {
   const { locale, code } = await params;
-  const t = await getTranslations("group");
-  const { userId } = await auth();
 
-  const group = await getGroupByCode(code);
+  const [t, { userId }, group, prices] = await Promise.all([
+    getTranslations("group"),
+    auth(),
+    getGroupByCode(code),
+    getPriceMap(),
+  ]);
 
   if (!group) {
     return (
@@ -49,9 +54,12 @@ export default async function GroupPage({ params }: Props) {
     hasCheese: order.hasCheese,
     adds: order.adds,
     userId: order.userId,
+    price: order.price,
   }));
 
-  const recipes = userId ? await getUserRecipes(userId) : [];
+  const [recipes, defaultName] = userId
+    ? await Promise.all([getUserRecipes(userId), getUserDefaultName(userId)])
+    : [[], ""];
 
   return (
     <GroupPageClient
@@ -61,7 +69,8 @@ export default async function GroupPage({ params }: Props) {
       locale={locale}
       userId={userId}
       recipes={recipes}
+      defaultName={defaultName}
+      prices={prices}
     />
   );
 }
-

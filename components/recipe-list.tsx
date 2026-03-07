@@ -4,8 +4,8 @@ import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Trash2, BookOpen } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ADDONS_EMOJIS } from "@/lib/kebab-config";
 import { deleteRecipe } from "@/lib/actions/recipes";
 
 type RecipeListProps = {
@@ -40,69 +40,70 @@ export function RecipeList({ recipes }: RecipeListProps) {
 
   if (recipes.length === 0) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center text-muted-foreground">
-          <BookOpen className="h-10 w-10 mx-auto mb-3 opacity-40" />
-          <p>{t("noRecipes")}</p>
-        </CardContent>
-      </Card>
+      <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 py-12 text-center">
+        <BookOpen className="h-10 w-10 mx-auto mb-3 text-stone-300 dark:text-stone-600" />
+        <p className="text-sm text-stone-400 dark:text-stone-500">
+          {t("noRecipes")}
+        </p>
+      </div>
     );
   }
 
   return (
     <div className="space-y-3">
       {recipes.map((recipe) => (
-        <Card key={recipe.id}>
-          <CardHeader className="pb-0">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">{recipe.name}</CardTitle>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                disabled={isPending}
-                onClick={() => handleDelete(recipe.id, recipe.name)}
-              >
-                <Trash2 className="h-4 w-4" />
-                <span className="sr-only">{tCommon("delete")}</span>
-              </Button>
-            </div>
-            {recipe.userName && (
-              <p className="text-sm text-muted-foreground">
-                {tKebab("name")}: {recipe.userName}
-              </p>
+        <div
+          key={recipe.id}
+          className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-4 sm:p-5 overflow-hidden"
+        >
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <span className="font-medium text-sm text-stone-900 dark:text-stone-50 truncate">
+              {recipe.name}
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-stone-400 dark:text-stone-600 hover:text-red-500 hover:bg-red-50/50 dark:hover:bg-red-950/20 cursor-pointer"
+              disabled={isPending}
+              onClick={() => handleDelete(recipe.id, recipe.name)}
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">{tCommon("delete")}</span>
+            </Button>
+          </div>
+          {recipe.userName && (
+            <p className="text-xs text-stone-400 dark:text-stone-500 mb-3">
+              {tKebab("name")}: {recipe.userName}
+            </p>
+          )}
+          <div className="flex flex-wrap gap-1.5 text-xs text-stone-600 dark:text-stone-400">
+            <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+              {tKebab(`types.${recipe.kebabType}`)}
+            </span>
+            {recipe.kebabSize && (
+              <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                {tKebab(`sizes.${recipe.kebabSize}`)}
+              </span>
             )}
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2 text-sm">
-              <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                {tKebab(`types.${recipe.kebabType}`)}
+            <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+              {tKebab(`sauces.${recipe.sauce}`)}
+            </span>
+            {recipe.hasCheese && (
+              <span className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md">
+                {tKebab("cheese")}
               </span>
-              {recipe.kebabSize && (
-                <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                  {tKebab(`sizes.${recipe.kebabSize}`)}
+            )}
+            {recipe.adds.length > 0 &&
+              recipe.adds.map((addon) => (
+                <span
+                  key={addon}
+                  className="bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-md"
+                >
+                  {ADDONS_EMOJIS[addon] || ""} {tKebab(`adds.${addon}`)}
                 </span>
-              )}
-              <span className="inline-flex items-center rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs">
-                {tKebab(`sauces.${recipe.sauce}`)}
-              </span>
-              {recipe.hasCheese && (
-                <span className="inline-flex items-center rounded-md bg-yellow-100 dark:bg-yellow-900/30 px-2 py-1 text-xs text-yellow-700 dark:text-yellow-300">
-                  {tKebab("cheese")} {tKebab("cheeseYes")}
-                </span>
-              )}
-              {recipe.adds.length > 0 &&
-                recipe.adds.map((addon) => (
-                  <span
-                    key={addon}
-                    className="inline-flex items-center rounded-md bg-green-100 dark:bg-green-900/30 px-2 py-1 text-xs text-green-700 dark:text-green-300"
-                  >
-                    {tKebab(`adds.${addon}`)}
-                  </span>
-                ))}
-            </div>
-          </CardContent>
-        </Card>
+              ))}
+          </div>
+        </div>
       ))}
     </div>
   );

@@ -6,6 +6,7 @@ import { OrderForm } from "@/components/order-form";
 import { OrderList } from "@/components/order-list";
 import { SmsModal } from "@/components/sms-modal";
 import { Button } from "@/components/ui/button";
+import type { PriceMap } from "@/lib/prices";
 import { Copy, MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -20,6 +21,7 @@ type Order = {
   hasCheese: boolean | null;
   adds: string[];
   userId: string | null;
+  price: number | null;
 };
 
 type Recipe = {
@@ -40,6 +42,8 @@ type GroupPageClientProps = {
   locale: string;
   userId?: string | null;
   recipes?: Recipe[];
+  defaultName?: string;
+  prices?: PriceMap;
 };
 
 export function GroupPageClient({
@@ -49,9 +53,14 @@ export function GroupPageClient({
   locale,
   userId,
   recipes = [],
+  defaultName = "",
+  prices = {},
 }: GroupPageClientProps) {
   const t = useTranslations("group");
+  const tCommon = useTranslations("common");
   const [smsOpen, setSmsOpen] = useState(false);
+
+  const groupTotal = orders.reduce((sum, o) => sum + (o.price ?? 0), 0);
 
   async function handleCopyLink() {
     const url = `${window.location.origin}/${locale}/group/${groupCode}`;
@@ -106,7 +115,13 @@ export function GroupPageClient({
 
         {/* Order Form */}
         <div className="bg-white dark:bg-stone-900 rounded-xl sm:rounded-2xl border border-stone-200 dark:border-stone-800 p-5 sm:p-6 mb-5 sm:mb-6">
-          <OrderForm groupCode={groupCode} userId={userId} recipes={recipes} />
+          <OrderForm
+            groupCode={groupCode}
+            userId={userId}
+            recipes={recipes}
+            defaultName={defaultName}
+            prices={prices}
+          />
         </div>
 
         {/* Orders divider */}
@@ -114,6 +129,7 @@ export function GroupPageClient({
           <span className="flex-1 border-t border-stone-200 dark:border-stone-800" />
           <span className="text-xs uppercase text-stone-500 dark:text-stone-500 font-medium">
             {t("orders")} ({orders.length})
+            {groupTotal > 0 && <> &middot; {groupTotal.toFixed(2)} &euro;</>}
           </span>
           <span className="flex-1 border-t border-stone-200 dark:border-stone-800" />
         </div>
@@ -156,4 +172,3 @@ export function GroupPageClient({
     </div>
   );
 }
-

@@ -1,12 +1,13 @@
 "use client";
 
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
-import { ArrowLeft } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { SignInButton, useAuth } from "@clerk/nextjs";
+import { ArrowLeft, UserCircle } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type HeaderProps = {
   showBack?: boolean;
@@ -16,6 +17,7 @@ type HeaderProps = {
 export function Header({ showBack = false, backHref }: HeaderProps) {
   const t = useTranslations("common");
   const router = useRouter();
+  const locale = useLocale();
   const { isSignedIn } = useAuth();
 
   const handleBack = () => {
@@ -43,7 +45,17 @@ export function Header({ showBack = false, backHref }: HeaderProps) {
       </div>
       <div className="flex items-center gap-0.5 sm:gap-2 flex-shrink-0">
         {isSignedIn ? (
-          <UserButton />
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="cursor-pointer text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
+          >
+            <Link href={`/${locale}/dashboard`}>
+              <UserCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-1.5" />
+              {t("dashboard")}
+            </Link>
+          </Button>
         ) : (
           <SignInButton mode="modal">
             <Button

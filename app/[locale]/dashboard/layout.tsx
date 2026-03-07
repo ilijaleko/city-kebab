@@ -6,8 +6,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 px-4 py-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950">
+      <div className="container mx-auto max-w-md sm:max-w-lg lg:max-w-3xl px-4 sm:px-5 py-4 sm:py-6">
         <Header showBack backHref="/" />
         {children}
       </div>

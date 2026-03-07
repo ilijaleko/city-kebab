@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { addOrder } from "@/lib/actions/orders";
 import { saveRecipe } from "@/lib/actions/recipes";
+import type { PriceMap } from "@/lib/prices";
+import { calculateOrderPrice } from "@/lib/prices";
 import {
   ADDONS_EMOJIS,
   KEBAB_ADDS,
@@ -31,7 +33,7 @@ import {
 } from "@/lib/kebab-config";
 import { BookmarkPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 type Recipe = {
@@ -49,9 +51,17 @@ type OrderFormProps = {
   groupCode: string;
   userId?: string | null;
   recipes?: Recipe[];
+  defaultName?: string;
+  prices?: PriceMap;
 };
 
-export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
+export function OrderForm({
+  groupCode,
+  userId,
+  recipes = [],
+  defaultName = "",
+  prices = {},
+}: OrderFormProps) {
   const t = useTranslations("kebab");
   const tGroup = useTranslations("group");
   const tRecipe = useTranslations("recipe");
@@ -59,7 +69,7 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
   const [isPending, startTransition] = useTransition();
   const [isSavingRecipe, startRecipeTransition] = useTransition();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(defaultName);
   const [kebabType, setKebabType] = useState("");
   const [kebabSize, setKebabSize] = useState("");
   const [sauce, setSauce] = useState("");
@@ -69,17 +79,15 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [recipeName, setRecipeName] = useState("");
 
-  function getTypeTranslationKey(type: string): string {
-    return type.replace(/ /g, "_");
-  }
-
-  function getSauceTranslationKey(s: string): string {
-    return s
-      .replace(/ /g, "_")
-      .replace(/\(/g, "")
-      .replace(/\)/g, "")
-      .replace("malo_manje", "manje");
-  }
+  const currentPrice = useMemo(
+    () =>
+      calculateOrderPrice(prices, {
+        kebabType,
+        kebabSize: shouldShowSize(kebabType) ? kebabSize : null,
+        hasCheese: shouldShowCheese(kebabType) ? hasCheese === "yes" : null,
+      }),
+    [prices, kebabType, kebabSize, hasCheese],
+  );
 
   function toggleAddon(addon: string) {
     setAdds((prev) =>
@@ -238,7 +246,7 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
           <SelectContent>
             {KEBAB_TYPES.map((type) => (
               <SelectItem key={type} value={type}>
-                {t(`types.${getTypeTranslationKey(type)}`)}
+                {t(`types.${type}`)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -284,7 +292,7 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
           <SelectContent>
             {SAUCE_OPTIONS.map((s) => (
               <SelectItem key={s} value={s}>
-                {t(`sauces.${getSauceTranslationKey(s)}`)}
+                {t(`sauces.${s}`)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -339,7 +347,7 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
                 onCheckedChange={() => toggleAddon(addon)}
               />
               <span className="text-sm text-stone-600 dark:text-stone-300">
-                {ADDONS_EMOJIS[addon]} {t(`adds.${addon.replace(/ /g, "_")}`)}
+                {ADDONS_EMOJIS[addon]} {t(`adds.${addon}`)}
               </span>
             </label>
           ))}
@@ -352,7 +360,11 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
         disabled={isPending}
         className="w-full bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900 text-white cursor-pointer rounded-xl h-11 font-bold shadow-sm"
       >
-        {isPending ? tGroup("adding") : tGroup("addOrder")}
+        {isPending
+          ? tGroup("adding")
+          : currentPrice != null
+            ? `${tGroup("addOrder")} — ${currentPrice.toFixed(2)} \u20AC`
+            : tGroup("addOrder")}
       </Button>
 
       {/* Save Recipe (signed-in users only) */}
@@ -414,4 +426,3 @@ export function OrderForm({ groupCode, userId, recipes = [] }: OrderFormProps) {
     </div>
   );
 }
-

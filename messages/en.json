@@ -11,7 +11,9 @@
     "back": "Back",
     "home": "Home",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "dashboard": "Profile"
   },
   "home": {
     "location": "Bjelovar, Croatia",
@@ -57,6 +59,9 @@
     "review4Text": "The vegetarian option is amazing too! They put so much care into everything. You can taste the love in every bite. Best fast food in the county.",
     "review4Author": "Petra S.",
     "review4Role": "Happy customer",
+    "menuSubtitle": "What we offer",
+    "menuTitle": "Our Menu",
+    "menuNote": "Sauces and toppings (onion, tomato, lettuce, cabbage, corn, cucumber) included in price.",
     "howItWorks": "How to order with the crew?",
     "step1Icon": "users",
     "step1Title": "Gather the crew",
@@ -117,10 +122,17 @@
     "cheese": "Cheese",
     "cheeseYes": "Yes",
     "cheeseNo": "No",
+    "menu": {
+      "mali": "Small",
+      "veliki": "Large",
+      "other": "Other",
+      "extras": "Extras",
+      "extraMeso": "Kebab meat (100g)"
+    },
     "addons": "Add-ons (optional):",
     "addonsAll": "All",
     "types": {
-      "pecivo": "Bread roll",
+      "lepinja": "Lepinja",
       "tortilja": "Tortilla",
       "vegetarijanski": "Vegetarian",
       "tortilja_mix_salata": "Tortilla mix salad"
