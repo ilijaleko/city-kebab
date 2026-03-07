@@ -20,8 +20,6 @@ import {
 } from "@/components/ui/select";
 import { addOrder } from "@/lib/actions/orders";
 import { saveRecipe } from "@/lib/actions/recipes";
-import type { PriceMap } from "@/lib/prices";
-import { calculateOrderPrice } from "@/lib/prices";
 import {
   ADDONS_EMOJIS,
   KEBAB_ADDS,
@@ -31,6 +29,8 @@ import {
   shouldShowCheese,
   shouldShowSize,
 } from "@/lib/kebab-config";
+import type { PriceMap } from "@/lib/prices";
+import { calculateOrderPrice } from "@/lib/prices";
 import { BookmarkPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
@@ -76,6 +76,7 @@ export function OrderForm({
   const [hasCheese, setHasCheese] = useState<string>("");
   const [adds, setAdds] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [recipeKey, setRecipeKey] = useState(0);
   const [recipeDialogOpen, setRecipeDialogOpen] = useState(false);
   const [recipeName, setRecipeName] = useState("");
 
@@ -122,6 +123,7 @@ export function OrderForm({
     setHasCheese("");
     setAdds([]);
     setErrors({});
+    setRecipeKey((k) => k + 1);
   }
 
   function handleSubmit() {
@@ -195,7 +197,7 @@ export function OrderForm({
           <label className="text-sm font-medium text-stone-700 dark:text-stone-200">
             {tRecipe("chooseRecipe")}
           </label>
-          <Select onValueChange={loadRecipe}>
+          <Select key={recipeKey} onValueChange={loadRecipe}>
             <SelectTrigger className="w-full rounded-lg">
               <SelectValue placeholder={tRecipe("chooseRecipe")} />
             </SelectTrigger>
@@ -426,3 +428,4 @@ export function OrderForm({
     </div>
   );
 }
+

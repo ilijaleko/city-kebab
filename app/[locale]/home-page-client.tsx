@@ -1,35 +1,24 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { GitHubStar } from "@/components/github-star";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GitHubStar } from "@/components/github-star";
-import { createGroup, checkAndJoinGroup } from "@/lib/actions/groups";
-import type { PriceMap } from "@/lib/prices";
+import { checkAndJoinGroup, createGroup } from "@/lib/actions/groups";
 import { MENU_CATEGORIES } from "@/lib/menu";
+import type { PriceMap } from "@/lib/prices";
 import { STATUS_DOT, useShopStatus } from "@/lib/shop-status";
 import {
+  Clock,
   Flame,
-  Sparkles,
-  Wheat,
-  Heart,
+  MapPin,
+  Quote,
+  Smartphone,
   Users,
   UtensilsCrossed,
-  Smartphone,
-  Quote,
-  MapPin,
-  Clock,
 } from "lucide-react";
-
-const qualityIcons = {
-  fire: Flame,
-  sparkles: Sparkles,
-  wheat: Wheat,
-  heart: Heart,
-} as const;
+import { useLocale, useTranslations } from "next-intl";
+import { useState, useTransition } from "react";
 
 const stepIcons = {
   users: Users,
@@ -160,15 +149,51 @@ export function HomePage({ prices }: { prices: PriceMap }) {
           <p className="font-playfair text-xs sm:text-sm italic text-stone-500 dark:text-stone-400 mt-2 sm:mt-3 px-4 sm:px-0">
             {t("heroSubtitle")}
           </p>
-        </div>
 
-        <OrnamentalDivider />
-
-        {/* Tagline */}
-        <div className="py-3 sm:py-4 text-center max-w-lg mx-auto animate-fade-up px-2 sm:px-0">
-          <p className="font-playfair text-xl sm:text-2xl md:text-3xl italic text-stone-800 dark:text-stone-200 leading-relaxed">
-            &ldquo;{t("taglineQuote")}&rdquo;
-          </p>
+          <div className="mt-4 sm:mt-5 flex items-center justify-center gap-2 sm:gap-2.5">
+            <Button
+              onClick={handleCreate}
+              disabled={isCreating}
+              size="sm"
+              className="bg-stone-900 hover:bg-stone-800 dark:bg-stone-50 dark:hover:bg-stone-200 dark:text-stone-900 text-white cursor-pointer px-4 font-medium rounded-lg text-xs sm:text-sm shadow-sm"
+            >
+              {isCreating ? t("creating") : t("createOrder")}
+            </Button>
+            <span className="text-[10px] text-stone-400 dark:text-stone-500">
+              {t("or")}
+            </span>
+            <Input
+              placeholder={t("enterGroupId")}
+              value={groupCode}
+              onChange={(e) => {
+                setGroupCode(e.target.value.toUpperCase());
+                setGroupError("");
+              }}
+              maxLength={6}
+              className="w-24 sm:w-28 text-center tracking-wider text-[10px] sm:text-xs rounded-lg h-8 sm:h-9 bg-white/70 dark:bg-stone-800/50 placeholder:tracking-normal"
+            />
+            <Button
+              onClick={handleJoin}
+              disabled={isJoining || !groupCode.trim()}
+              variant="outline"
+              size="sm"
+              className="cursor-pointer rounded-lg text-xs sm:text-sm"
+            >
+              {isJoining ? t("joining") : t("joinGroup")}
+            </Button>
+          </div>
+          {groupError && (
+            <div className="mt-2 rounded-xl bg-red-50/80 dark:bg-red-950/30 p-2 text-xs text-red-600 dark:text-red-400 text-center">
+              <p>{groupError}</p>
+              <Button
+                variant="link"
+                onClick={handleCreate}
+                className="text-orange-600 dark:text-orange-400 p-0 h-auto mt-1 cursor-pointer text-xs"
+              >
+                {t("createNewInstead")}
+              </Button>
+            </div>
+          )}
         </div>
 
         <OrnamentalDivider />
@@ -184,41 +209,12 @@ export function HomePage({ prices }: { prices: PriceMap }) {
             </h2>
           </div>
           <div className="vintage-paper bg-white dark:bg-stone-900 rounded-xl sm:rounded-2xl border border-stone-200 dark:border-stone-800 p-5 sm:p-8">
-            <p className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed sm:text-base sm:leading-relaxed first-letter:text-3xl first-letter:font-playfair first-letter:font-bold first-letter:text-orange-600 dark:first-letter:text-orange-400 first-letter:mr-1 first-letter:float-left">
+            <p className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed sm:text-base sm:leading-relaxed pl-4 sm:pl-5 border-l-3 border-orange-400 dark:border-orange-600">
               {t("storyText")}
             </p>
             <p className="text-stone-700 dark:text-stone-300 text-sm leading-relaxed sm:text-base sm:leading-relaxed mt-3 sm:mt-4">
               {t("storyText2")}
             </p>
-          </div>
-        </section>
-
-        {/* Quality highlights */}
-        <section className="py-4 sm:py-6">
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
-            {(["Fresh", "Sauce", "Bread", "Love"] as const).map((key, i) => {
-              const iconName = t(
-                `quality${key}Icon`,
-              ) as keyof typeof qualityIcons;
-              const Icon = qualityIcons[iconName] || Heart;
-              return (
-                <div
-                  key={key}
-                  className="group bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 p-3 sm:p-4 text-center hover:bg-stone-50 dark:hover:bg-stone-800 hover:border-stone-300 dark:hover:border-stone-700 transition-all"
-                  style={{ animationDelay: `${i * 100}ms` }}
-                >
-                  <div className="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-orange-50 dark:bg-stone-800 mb-1.5 sm:mb-2">
-                    <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <h3 className="font-playfair font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-50">
-                    {t(`quality${key}`)}
-                  </h3>
-                  <p className="text-[10px] sm:text-xs text-stone-600 dark:text-stone-400 mt-0.5 sm:mt-1 leading-snug">
-                    {t(`quality${key}Desc`)}
-                  </p>
-                </div>
-              );
-            })}
           </div>
         </section>
 
@@ -384,33 +380,29 @@ export function HomePage({ prices }: { prices: PriceMap }) {
               </div>
             )}
           </div>
-        </section>
 
-        {/* How it works */}
-        <section className="pb-8 sm:pb-10 text-sm text-stone-600 dark:text-stone-400">
-          <h3 className="font-playfair text-lg sm:text-xl font-bold text-stone-900 dark:text-stone-50 mb-3 sm:mb-4 text-center">
-            {t("howItWorks")}
-          </h3>
-          <ol className="space-y-2.5 sm:space-y-3 max-w-sm mx-auto">
-            {([1, 2, 3, 4] as const).map((step) => {
-              const iconName = t(`step${step}Icon`) as keyof typeof stepIcons;
-              const Icon = stepIcons[iconName] || Flame;
-              return (
-                <li key={step} className="flex gap-2.5 sm:gap-3 items-center">
-                  <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-50 dark:bg-stone-800 flex items-center justify-center">
-                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-600 dark:text-orange-400" />
-                  </div>
-                  <span className="text-xs sm:text-sm">
-                    <span className="font-medium text-stone-800 dark:text-stone-200">
+          {/* How it works */}
+          <div className="mt-5 sm:mt-6 pt-4 sm:pt-5 border-t border-stone-200 dark:border-stone-800">
+            <p className="text-[10px] sm:text-xs text-stone-400 dark:text-stone-500 text-center uppercase tracking-widest mb-3">
+              {t("howItWorks")}
+            </p>
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-3 text-center">
+              {([1, 2, 3, 4] as const).map((step) => {
+                const iconName = t(`step${step}Icon`) as keyof typeof stepIcons;
+                const Icon = stepIcons[iconName] || Flame;
+                return (
+                  <div key={step}>
+                    <div className="mx-auto w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-50 dark:bg-stone-800 flex items-center justify-center mb-1">
+                      <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <p className="text-[10px] sm:text-xs font-medium text-stone-700 dark:text-stone-300 leading-tight">
                       {t(`step${step}Title`)}
-                    </span>
-                    {" — "}
-                    {t(`step${step}Desc`)}
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </section>
 
         {/* Footer */}
@@ -434,3 +426,4 @@ export function HomePage({ prices }: { prices: PriceMap }) {
     </div>
   );
 }
+
