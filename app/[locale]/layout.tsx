@@ -16,8 +16,25 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "City Kebab",
-  description: "Grupna naruzba kebaba s prijateljima",
+  title: {
+    default: "City Kebab Bjelovar",
+    template: "%s | City Kebab Bjelovar",
+  },
+  description: "City Kebab Bjelovar. Svježe meso sa ražnja i domaći umaci.",
+  keywords: [
+    "City Kebab",
+    "Bjelovar",
+    "kebab",
+    "kebab Bjelovar",
+    "grupna narudžba",
+    "dostava kebab",
+  ],
+  openGraph: {
+    title: "City Kebab Bjelovar",
+    description: "Svježe meso sa ražnja i domaći umaci.",
+    type: "website",
+    locale: "hr_HR",
+  },
 };
 
 type Props = {
@@ -53,3 +70,4 @@ export default async function LocaleLayout({ children, params }: Props) {
     </ClerkProvider>
   );
 }
+
