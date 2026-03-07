@@ -1,5 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
 import { getGroupByCode } from "@/lib/queries/groups";
+import { getUserRecipes } from "@/lib/queries/recipes";
+import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 import { GroupPageClient } from "./group-page-client";
 
@@ -50,6 +51,8 @@ export default async function GroupPage({ params }: Props) {
     userId: order.userId,
   }));
 
+  const recipes = userId ? await getUserRecipes(userId) : [];
+
   return (
     <GroupPageClient
       groupCode={group.code}
@@ -57,6 +60,8 @@ export default async function GroupPage({ params }: Props) {
       orders={orders}
       locale={locale}
       userId={userId}
+      recipes={recipes}
     />
   );
 }
+

@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { toast } from "sonner";
+import { GitHubStar } from "@/components/github-star";
 import { Header } from "@/components/header";
 import { OrderForm } from "@/components/order-form";
 import { OrderList } from "@/components/order-list";
 import { SmsModal } from "@/components/sms-modal";
 import { Button } from "@/components/ui/button";
-import { GitHubStar } from "@/components/github-star";
 import { Copy, MessageSquare } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type Order = {
   id: string;
@@ -22,12 +22,24 @@ type Order = {
   userId: string | null;
 };
 
+type Recipe = {
+  id: string;
+  name: string;
+  userName: string | null;
+  kebabType: string;
+  kebabSize: string | null;
+  sauce: string;
+  hasCheese: boolean | null;
+  adds: string[];
+};
+
 type GroupPageClientProps = {
   groupCode: string;
   groupCreatorId?: string | null;
   orders: Order[];
   locale: string;
   userId?: string | null;
+  recipes?: Recipe[];
 };
 
 export function GroupPageClient({
@@ -36,6 +48,7 @@ export function GroupPageClient({
   orders,
   locale,
   userId,
+  recipes = [],
 }: GroupPageClientProps) {
   const t = useTranslations("group");
   const [smsOpen, setSmsOpen] = useState(false);
@@ -93,7 +106,7 @@ export function GroupPageClient({
 
         {/* Order Form */}
         <div className="bg-white dark:bg-stone-900 rounded-xl sm:rounded-2xl border border-stone-200 dark:border-stone-800 p-5 sm:p-6 mb-5 sm:mb-6">
-          <OrderForm groupCode={groupCode} userId={userId} />
+          <OrderForm groupCode={groupCode} userId={userId} recipes={recipes} />
         </div>
 
         {/* Orders divider */}
@@ -143,3 +156,4 @@ export function GroupPageClient({
     </div>
   );
 }
+
