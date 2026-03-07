@@ -22,8 +22,9 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
-RUN npm install prisma
+RUN npm install prisma dotenv
 
 USER nextjs
 EXPOSE 3000
