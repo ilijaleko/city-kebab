@@ -1,7 +1,9 @@
-import { redirect } from "next/navigation";
-import { getLocale } from "next-intl/server";
 import { isAdmin } from "@/lib/auth";
+import { getAllGroups } from "@/lib/queries/groups";
 import { getPriceMap } from "@/lib/queries/prices";
+import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
+import { GroupsList } from "./groups-list";
 import { PriceEditor } from "./price-editor";
 
 const PRICE_ITEMS = [
@@ -21,11 +23,19 @@ export default async function AdminPage() {
     redirect(`/${locale}/dashboard`);
   }
 
-  const prices = await getPriceMap();
+  const [prices, groups] = await Promise.all([getPriceMap(), getAllGroups()]);
 
   const items = PRICE_ITEMS.map((item) => ({
     ...item,
     price: prices[item.key] ?? 0,
+  }));
+
+  const groupData = groups.map((g) => ({
+    id: g.id,
+    code: g.code,
+    createdAt: g.createdAt,
+    orderCount: g._count.orders,
+    total: g.orders.reduce((sum, o) => sum + (o.price ?? 0), 0),
   }));
 
   return (
@@ -35,11 +45,19 @@ export default async function AdminPage() {
           Admin
         </h1>
         <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
-          Upravljanje cijenama
+          Upravljanje cijenama i grupama
         </p>
       </div>
 
       <PriceEditor items={items} />
+
+      <div>
+        <h2 className="font-playfair text-lg sm:text-xl font-bold text-stone-900 dark:text-stone-50 mb-3">
+          Grupe ({groupData.length})
+        </h2>
+        <GroupsList groups={groupData} />
+      </div>
     </div>
   );
 }
+

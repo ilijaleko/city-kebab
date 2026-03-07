@@ -18,3 +18,14 @@ export async function groupExists(code: string): Promise<boolean> {
   });
   return !!group;
 }
+
+export async function getAllGroups() {
+  return db.group.findMany({
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: { select: { orders: true } },
+      orders: { select: { price: true } },
+    },
+  });
+}
+

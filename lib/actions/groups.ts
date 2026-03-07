@@ -1,10 +1,12 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { isAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { generateCode } from "@/lib/utils/generate-code";
-import { redirect } from "next/navigation";
 import { groupExists } from "@/lib/queries/groups";
+import { generateCode } from "@/lib/utils/generate-code";
+import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createGroup(locale: string) {
   const { userId } = await auth();
@@ -23,6 +25,13 @@ export async function createGroup(locale: string) {
   redirect(`/${locale}/group/${code}`);
 }
 
+export async function deleteGroup(groupId: string) {
+  if (!(await isAdmin())) throw new Error("Unauthorized");
+
+  await db.group.delete({ where: { id: groupId } });
+  revalidatePath("/[locale]/dashboard/admin");
+}
+
 export async function checkAndJoinGroup(code: string, locale: string) {
   const exists = await groupExists(code.toUpperCase().trim());
   if (!exists) {
@@ -30,3 +39,4 @@ export async function checkAndJoinGroup(code: string, locale: string) {
   }
   redirect(`/${locale}/group/${code.toUpperCase().trim()}`);
 }
+
